@@ -1,0 +1,60 @@
+{
+    "easycom": {
+        "autoscan": true,
+        "regular": {
+            "^u-(.*)": "@/components/u-$1/u-$1.vue",
+            "^hlw-(.*)": "@hlw-uni-mp/core/components/$1.vue"
+        }
+    },
+    "pages": [
+        {
+            "path": "pages/index/index",
+            "style": {
+                "navigationBarTitleText": "首页"
+            }
+        },
+        {
+            "path": "pages/user/index",
+            "style": {
+                "navigationBarTitleText": "我的"
+            }
+        },
+        {
+            "path": "pages/tools/index",
+            "style": {
+                "navigationBarTitleText": "工具"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "hlw-uni-mp",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8"
+    },
+    "tabBar": {
+        "color": "#bfbfbf",
+        "selectedColor": "#08c060",
+        "backgroundColor": "rgba(191, 191, 191, 0.8)",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "static/tabs/icon_home.png",
+                "selectedIconPath": "static/tabs/icon_home_cur.png"
+            },
+            {
+                "pagePath": "pages/tools/index",
+                "text": "工具",
+                "iconPath": "static/tabs/icon_xing.png",
+                "selectedIconPath": "static/tabs/icon_xing_cur.png"
+            },
+            {
+                "pagePath": "pages/user/index",
+                "text": "我的",
+                "iconPath": "static/tabs/icon_user.png",
+                "selectedIconPath": "static/tabs/icon_user_cur.png"
+            }
+        ]
+    }
+}

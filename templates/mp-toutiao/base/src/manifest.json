@@ -1,0 +1,13 @@
+{
+  "name": "{{name}}",
+  "appid": "",
+  "description": "{{description}}",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-toutiao": {
+    "appid": "",
+    "setting": { "urlCheck": false },
+    "usingComponents": true
+  }
+}

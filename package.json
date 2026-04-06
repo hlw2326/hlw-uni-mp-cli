@@ -1,0 +1,38 @@
+{
+  "name": "@hlw-uni/mp-cli",
+  "version": "1.0.2",
+  "description": "uniapp 小程序脚手架生成器",
+  "main": "bin/cli.js",
+  "bin": {
+    "hlw-uni-mp": "./bin/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx bin/cli.ts",
+    "create": "tsx bin/cli.ts create",
+    "build": "esbuild bin/cli.ts --bundle --platform=node --outfile=bin/cli.js --format=cjs --external:fs-extra --external:inquirer --external:chalk --external:commander --external:ora --external:path --external:fs",
+    "prepublish": "pnpm build",
+    "postbuild": "node -e \"const path=require('path'),fs=require('fs');let c=fs.readFileSync('bin/cli.js','utf8');const fix='path2.join(__dirname,\\\"..\\\",\\\"templates\\\")';if(!c.includes(fix)){c=c.replace(/var TEMPLATES_DIR = path2\\.join\\(__dirname\\);/,'var TEMPLATES_DIR = '+fix+';');fs.writeFileSync('bin/cli.js',c);console.log('Fixed TEMPLATES_DIR path')}\""
+  },
+  "keywords": [
+    "uniapp",
+    "scaffold",
+    "weixin",
+    "toutiao",
+    "miniprogram"
+  ],
+  "author": "hlw2326",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^8.2.7",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.0",
+    "esbuild": "^0.28.0",
+    "tsx": "^4.19.0"
+  }
+}
