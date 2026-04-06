@@ -9,6 +9,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: 拉取代码
@@ -19,10 +21,12 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
-          cache: 'npm'
+
+      - name: 安装 pnpm
+        run: npm install -g pnpm
 
       - name: 安装依赖
-        run: npm ci
+        run: pnpm install
 
       - name: 构建项目（可选）
         run: npm run build
