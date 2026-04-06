@@ -3,7 +3,7 @@ name: Publish to npm
 on:
   push:
     tags:
-      - 'v*' #只在打 tag 时发布（推荐）
+      - '*' #只在打 tag 时发布（推荐）
 
 
 jobs:
