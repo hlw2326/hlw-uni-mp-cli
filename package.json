@@ -1,6 +1,6 @@
 {
     "name": "@hlw-uni/mp-cli",
-    "version": "1.0.6",
+    "version": "1.0.11",
     "description": "uniapp 小程序脚手架生成器",
     "main": "bin/cli.js",
     "bin": {
@@ -11,7 +11,7 @@
         "create": "tsx bin/cli.ts create",
         "build": "esbuild bin/cli.ts --bundle --platform=node --outfile=bin/cli.js --format=cjs --external:fs-extra --external:inquirer --external:chalk --external:commander --external:ora --external:path --external:fs",
         "prepublish": "pnpm build",
-        "postbuild": "node -e \"const path=require('path'),fs=require('fs');let c=fs.readFileSync('bin/cli.js','utf8');const fix='path2.join(__dirname,\\\"..\\\",\\\"templates\\\")';if(!c.includes(fix)){c=c.replace(/var TEMPLATES_DIR = path2\\.join\\(__dirname\\);/,'var TEMPLATES_DIR = '+fix+';');fs.writeFileSync('bin/cli.js',c);console.log('Fixed TEMPLATES_DIR path')}\""
+        "postbuild": "node scripts/fix-templates-path.js"
     },
     "keywords": [
         "uniapp",
