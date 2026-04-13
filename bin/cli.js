@@ -76,8 +76,7 @@ var require_config = __commonJS({
         return {
           id,
           name: meta.name || `\u6A21\u677F ${id}`,
-          description: meta.description || "",
-          colors: Array.isArray(meta.colors) ? meta.colors : ["#667eea", "#764ba2"]
+          description: meta.description || ""
         };
       });
       return { id: platform, name: PLATFORM_NAMES[platform] || platform, templates };
@@ -302,9 +301,7 @@ async function runCreate(opts) {
     name,
     description,
     author,
-    date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
-    primaryColor: styleTemplate?.colors[0] ?? "#3b82f6",
-    secondaryColor: styleTemplate?.colors[1] ?? "#764ba2"
+    date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
   });
   spinner.succeed();
   console.log();

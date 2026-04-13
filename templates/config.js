@@ -76,7 +76,6 @@ function getPlatformConfig(platform) {
             id,
             name: meta.name || `模板 ${id}`,
             description: meta.description || '',
-            colors: Array.isArray(meta.colors) ? meta.colors : ['#667eea', '#764ba2'],
         };
     });
 

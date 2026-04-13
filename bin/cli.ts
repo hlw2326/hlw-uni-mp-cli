@@ -10,7 +10,7 @@ import path from 'path';
 import fs from 'fs-extra';
 
 interface Platform { id: string; name: string; templateCount: number; }
-interface Template { id: string; name: string; description: string; colors: string[]; }
+interface Template { id: string; name: string; description: string; }
 interface PlatformConfig { id: string; name: string; templates: Template[]; }
 
 const cwd = process.cwd();
@@ -224,8 +224,6 @@ async function runCreate(opts: {
     description,
     author,
     date: new Date().toISOString().split('T')[0],
-    primaryColor: styleTemplate?.colors[0] ?? '#3b82f6',
-    secondaryColor: styleTemplate?.colors[1] ?? '#764ba2',
   });
 
   spinner.succeed();

@@ -10,28 +10,30 @@ npm install -g @hlw-uni/mp-cli
 
 # 或直接使用 npx
 npx @hlw-uni/mp-cli create my-project
+
+npx -y @hlw-uni/mp-cli@latest create my-project
 ```
 
 ## 命令
 
-| 命令 | 说明 |
-|------|------|
-| `hlw-uni-mp create [name]` | 创建新项目（交互式引导） |
-| `hlw-uni-mp create [name] --ci` | 非交互模式创建，使用默认选项 |
-| `hlw-uni-mp add page <name>` | 添加新页面（自动注册到 pages.json） |
-| `hlw-uni-mp add component <name>` | 添加新组件 |
-| `hlw-uni-mp list` | 列出所有可用平台和模板 |
-| `hlw-uni-mp --help` | 显示帮助信息 |
+| 命令                              | 说明                                |
+| --------------------------------- | ----------------------------------- |
+| `hlw-uni-mp create [name]`        | 创建新项目（交互式引导）            |
+| `hlw-uni-mp create [name] --ci`   | 非交互模式创建，使用默认选项        |
+| `hlw-uni-mp add page <name>`      | 添加新页面（自动注册到 pages.json） |
+| `hlw-uni-mp add component <name>` | 添加新组件                          |
+| `hlw-uni-mp list`                 | 列出所有可用平台和模板              |
+| `hlw-uni-mp --help`               | 显示帮助信息                        |
 
 ### create 命令选项
 
-| 选项 | 说明 |
-|------|------|
-| `-p, --platform <platform>` | 指定平台 (`mp-weixin` / `mp-toutiao`) |
-| `-t, --template <template>` | 指定模板 ID |
-| `-d, --description <description>` | 项目描述 |
-| `-a, --author <author>` | 作者名称 |
-| `--ci` | 非交互模式，自动使用默认选项 |
+| 选项                              | 说明                                  |
+| --------------------------------- | ------------------------------------- |
+| `-p, --platform <platform>`       | 指定平台 (`mp-weixin` / `mp-toutiao`) |
+| `-t, --template <template>`       | 指定模板 ID                           |
+| `-d, --description <description>` | 项目描述                              |
+| `-a, --author <author>`           | 作者名称                              |
+| `--ci`                            | 非交互模式，自动使用默认选项          |
 
 ## 使用示例
 
@@ -60,9 +62,9 @@ hlw-uni-mp list
 
 ## 支持的平台
 
-| 平台 | ID | 描述 |
-|------|-----|------|
-| 微信小程序 | `mp-weixin` | 微信小程序模板 |
+| 平台       | ID           | 描述           |
+| ---------- | ------------ | -------------- |
+| 微信小程序 | `mp-weixin`  | 微信小程序模板 |
 | 抖音小程序 | `mp-toutiao` | 抖音小程序模板 |
 
 ## 模板
@@ -151,12 +153,12 @@ npm run build:mp-toutiao
 
 ```json
 {
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "commander": "^11.1.0",
-    "fs-extra": "^11.2.0",
-    "inquirer": "^8.2.7",
-    "ora": "^5.4.1"
-  }
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "commander": "^11.1.0",
+        "fs-extra": "^11.2.0",
+        "inquirer": "^8.2.7",
+        "ora": "^5.4.1"
+    }
 }
 ```

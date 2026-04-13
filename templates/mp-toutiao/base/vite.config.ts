@@ -11,13 +11,20 @@ export default defineConfig(async () => {
   return {
     plugins: [
       uni(),
-      hlwUni({ primaryColor: '{{primaryColor}}' }),
+      hlwUni(),
       // https://github.com/unocss/unocss
       UnoCss(),
     ],
     resolve: {
       alias: {
         '@': '/src',
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
       },
     },
   };

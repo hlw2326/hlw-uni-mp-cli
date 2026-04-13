@@ -1,11 +1,13 @@
-import App from './App.vue';
-import { useApp, setupDefaultInterceptors, http } from '@hlw-uni/mp-core';
-import { useUserStore } from './stores/user';
-
-const app = useApp();
+import { createSSRApp } from "vue";
+import { createPinia } from "pinia";
+import { createUnistorage } from "pinia-plugin-unistorage";
+import App from "./App.vue";
+import { setupDefaultInterceptors, hlw, http } from "@hlw-uni/mp-core";
+import { useUserStore } from "./stores/user";
 
 // 注册默认拦截器（Token + 业务错误 + 401）
 setupDefaultInterceptors({
+    baseURL: (import.meta.env as Record<string, string>).VITE_API_BASE_URL ?? "",
     getToken: () => useUserStore().token,
     onUnauthorized: () => {
         useUserStore().$patch({ token: "", userInfo: null });
@@ -14,15 +16,17 @@ setupDefaultInterceptors({
     sigSecret: (import.meta.env as Record<string, string>).VITE_SIG_SECRET ?? "",
 });
 
-// --- 可选：添加全局请求拦截器 ---
-// http.onRequest((config) => {
-//   config.headers = { ...config.headers, 'X-Custom-Header': 'value' };
-//   return config;
-// });
+export function createApp() {
+    const app = createSSRApp(App);
 
-// --- 可选：附加额外插件（如 Pinia、Vue Router、VueUse 等） ---
-// app.use(pinia);
-// app.use(router);
-// app.use(VueUsePlugin);
+    // 初始化 Pinia
+    const pinia = createPinia();
+    pinia.use(createUnistorage());
+    app.use(pinia);
 
-app.install(App);
+    // 挂载全局工具
+    app.config.globalProperties["hlw"] = hlw;
+
+    return { app };
+}
+
