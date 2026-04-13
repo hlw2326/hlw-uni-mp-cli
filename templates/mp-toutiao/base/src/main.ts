@@ -8,8 +8,10 @@ const app = useApp();
 setupDefaultInterceptors({
     getToken: () => useUserStore().token,
     onUnauthorized: () => {
-        useUserStore().$patch({ token: '', userInfo: null });
+        useUserStore().$patch({ token: "", userInfo: null });
     },
+    // @ts-ignore
+    sigSecret: (import.meta.env as Record<string, string>).VITE_SIG_SECRET ?? "",
 });
 
 // --- 可选：添加全局请求拦截器 ---

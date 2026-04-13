@@ -1,42 +1,32 @@
 /**
- * User Pinia Store — token, userInfo
+ * User Pinia Store — token, userInfo, login/logout
  */
 import { defineStore } from "pinia";
-import { ref } from "vue";
-
-export interface UserInfo {
-    id: string;
-    pid: number;
-    openid: string;
-    unionid: string;
-    nickname: string;
-    avatar_url: string;
-    gender: number;
-    phone: string;
-    score: number;
-    vip_time: number;
-    login_ip: string;
-    last_login_ip: string;
-    login_at: string | null;
-    last_login_at: string | null;
-    remark: string;
-    device_model: string;
-    device_system: string;
-    screen_width: number;
-    screen_height: number;
-    sdk_version: string;
-    app_version: string;
-    app_channel: string;
-}
+import { ref, computed } from "vue";
+import type { UserInfo } from "@/api/user";
 
 export const useUserStore = defineStore(
     "user",
     () => {
         const token = ref("");
         const userInfo = ref<UserInfo | null>(null);
-        const isLoggedIn = ref(false);
 
-        return { token, userInfo, isLoggedIn };
+        /** 是否已登录 */
+        const isLoggedIn = computed(() => !!token.value);
+
+        /** 设置登录态 */
+        function setLogin(_token: string, user: UserInfo) {
+            token.value = _token;
+            userInfo.value = user;
+        }
+
+        /** 清除登录态 */
+        function clearLogin() {
+            token.value = "";
+            userInfo.value = null;
+        }
+
+        return { token, userInfo, isLoggedIn, setLogin, clearLogin };
     },
     { unistorage: true },
 );

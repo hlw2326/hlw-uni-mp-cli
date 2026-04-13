@@ -1,12 +1,14 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "verbatimModuleSyntax": false,
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["@dcloudio/types"]
+    "types": ["@dcloudio/types", "vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["node_modules", "dist", "unpackage"]
