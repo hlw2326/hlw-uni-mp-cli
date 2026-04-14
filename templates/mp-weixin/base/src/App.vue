@@ -13,4 +13,5 @@ onHide(() => {
 </script>
 
 <style lang="scss">
+@use './static/style/style.scss';
 </style>

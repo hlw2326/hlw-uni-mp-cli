@@ -24,6 +24,7 @@ export default defineConfig(async () => {
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler',
+          silenceDeprecations: ['legacy-js-api'],
         },
       },
     },

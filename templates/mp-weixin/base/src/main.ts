@@ -7,13 +7,12 @@ import { useUserStore } from "./store";
 
 // 注册默认拦截器（Token + 业务错误 + 401）
 setupDefaultInterceptors({
-    baseURL: (import.meta.env as Record<string, string>).VITE_API_BASE_URL ?? "",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     getToken: () => useUserStore().token,
     onUnauthorized: () => {
         useUserStore().$patch({ token: "", userInfo: null });
     },
-    // @ts-ignore
-    sigSecret: (import.meta.env as Record<string, string>).VITE_SIG_SECRET ?? "",
+    sigSecret: import.meta.env.VITE_SIG_SECRET,
 });
 
 export function createApp() {
