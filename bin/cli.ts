@@ -106,51 +106,65 @@ async function replaceTemplateVars(dir: string, vars: Record<string, string>) {
 
 function printBanner() {
   const c = chalk;
-  const rainbow = (t: string) =>
-    t.split('').map((ch, i) => {
-      const colors = [c.red, c.yellow, c.green, c.cyan, c.blue, c.magenta];
-      return colors[i % colors.length](ch);
-    }).join('');
 
-  /** 终端里常见 CJK / 全角约占 2 列，用于对齐框线 */
   function visualWidth(s: string): number {
     let w = 0;
     for (const ch of s) {
       const code = ch.codePointAt(0)!;
-      if (code >= 0x2e80 && code <= 0x9fff) w += 2;
-      else if (code >= 0xff00 && code <= 0xffef) w += 2;
+      if ((code >= 0x2e80 && code <= 0x9fff) || (code >= 0xff00 && code <= 0xffef)) w += 2;
       else w += 1;
     }
     return w;
   }
 
-  const W = 44;
-  const inner = W - 4;
-  const b = c.cyanBright;
-  const row = (plainMeasure: string, colored: string) => {
-    const pad = ' '.repeat(Math.max(0, inner - visualWidth(plainMeasure)));
-    console.log(`   ${b('║')} ${colored}${pad} ${b('║')}`);
+  const W   = 50;
+  const ind = '  ';
+
+  const row = (plain: string, colored: string) => {
+    const pad = ' '.repeat(Math.max(0, W - visualWidth(plain)));
+    console.log(`${ind}${c.dim('│')} ${colored}${pad} ${c.dim('│')}`);
+  };
+  const blank = () => console.log(`${ind}${c.dim('│')}${' '.repeat(W + 2)}${c.dim('│')}`);
+
+  // 工具名：字母间距 + 三段渐变色（cyan → blue → magenta）
+  const nameChars  = 'hlw-uni-mp'.split('');
+  const nameColors = [c.cyanBright, c.cyanBright, c.cyanBright, c.dim,
+                      c.blueBright, c.blueBright, c.blueBright, c.dim,
+                      c.magentaBright, c.magentaBright];
+  const nameGrad   = nameChars.map((ch, i) => nameColors[i](ch)).join(c.dim(' '));
+  const namePlain  = 'h l w - u n i - m p'; // 19 chars，用于宽度计算
+
+  // 版本徽章 + 标题行排版
+  const badge     = ` v${version} `;
+  const titleGap  = W - 3 /* ✻   */ - namePlain.length - badge.length;
+  const titleLine = c.cyan('✻') + '  ' + nameGrad
+                  + ' '.repeat(Math.max(0, titleGap))
+                  + c.bgCyan.black(badge);
+
+  // 命令行（两列对齐）
+  const cmdColW = 16;
+  const cmdRow = (cmd: string, arg: string, desc: string) => {
+    const full   = arg ? `${cmd} ${arg}` : cmd;
+    const padLen = Math.max(0, cmdColW - full.length);
+    const plain  = `  ❯  ${full}${' '.repeat(padLen)}${desc}`;
+    const colored = `  ${c.cyan('❯')}  ${c.bold.white(cmd)}`
+                  + (arg ? ` ${c.dim(arg)}` : '')
+                  + ' '.repeat(padLen)
+                  + c.dim(desc);
+    row(plain, colored);
   };
 
   console.log();
-  console.log(rainbow('   ██╗  ██╗ ██████╗ ████████╗███████╗██████╗ ███████╗'));
-  console.log(rainbow('   ██║  ██║██╔═══██╗╚══██╔══╝██╔════╝██╔══██╗██╔════╝'));
-  console.log(rainbow('   ███████║██║   ██║   ██║   █████╗  ██████╔╝███████╗'));
-  console.log(rainbow('   ██╔══██║██║   ██║   ██║   ██╔══╝  ██╔══██╗╚════██║'));
-  console.log(rainbow('   ██║  ██║╚██████╔╝   ██║   ███████╗██║  ██║███████║'));
-  console.log(rainbow('   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝'));
-  console.log();
-  console.log('   ' + b('╔' + '═'.repeat(W) + '╗'));
-  const badge = ` ${version} `;
-  row(
-    `◆  hlw-uni CLI  ${badge}`,
-    `${c.magentaBright('◆')}  ${c.bold.white('hlw-uni')}  ${c.cyanBright('CLI')}  ${c.black.bgYellowBright(badge)}`,
-  );
-  const subPlain = `   UniApp 小程序脚手架生成器`;
-  row(subPlain, `   ${c.dim.gray('UniApp')}   ${c.gray('小程序脚手架生成器')}`);
-  console.log('   ' + b('╚' + '═'.repeat(W) + '╝'));
-  console.log();
-  console.log('   ' + c.dim.cyan('▸') + ' ' + c.dim('hlw-uni-mp --help'));
+  console.log(`${ind}${c.dim('╭' + '─'.repeat(W + 2) + '╮')}`);
+  blank();
+  console.log(`${ind}${c.dim('│')} ${titleLine} ${c.dim('│')}`);
+  blank();
+  row('  UniApp 小程序脚手架生成器', `  ${c.white('UniApp 小程序脚手架生成器')}`);
+  blank();
+  cmdRow('create', '<name>', '开始创建新项目');
+  cmdRow('--help', '',       '查看所有命令');
+  blank();
+  console.log(`${ind}${c.dim('╰' + '─'.repeat(W + 2) + '╯')}`);
   console.log();
 }
 

@@ -210,46 +210,59 @@ async function replaceTemplateVars(dir, vars) {
 }
 function printBanner() {
   const c = import_chalk.default;
-  const rainbow = (t) => t.split("").map((ch, i) => {
-    const colors = [c.red, c.yellow, c.green, c.cyan, c.blue, c.magenta];
-    return colors[i % colors.length](ch);
-  }).join("");
   function visualWidth(s) {
     let w = 0;
     for (const ch of s) {
       const code = ch.codePointAt(0);
-      if (code >= 11904 && code <= 40959) w += 2;
-      else if (code >= 65280 && code <= 65519) w += 2;
+      if (code >= 11904 && code <= 40959 || code >= 65280 && code <= 65519) w += 2;
       else w += 1;
     }
     return w;
   }
-  const W = 44;
-  const inner = W - 4;
-  const b = c.cyanBright;
-  const row = (plainMeasure, colored) => {
-    const pad = " ".repeat(Math.max(0, inner - visualWidth(plainMeasure)));
-    console.log(`   ${b("\u2551")} ${colored}${pad} ${b("\u2551")}`);
+  const W = 50;
+  const ind = "  ";
+  const row = (plain, colored) => {
+    const pad = " ".repeat(Math.max(0, W - visualWidth(plain)));
+    console.log(`${ind}${c.dim("\u2502")} ${colored}${pad} ${c.dim("\u2502")}`);
+  };
+  const blank = () => console.log(`${ind}${c.dim("\u2502")}${" ".repeat(W + 2)}${c.dim("\u2502")}`);
+  const nameChars = "hlw-uni-mp".split("");
+  const nameColors = [
+    c.cyanBright,
+    c.cyanBright,
+    c.cyanBright,
+    c.dim,
+    c.blueBright,
+    c.blueBright,
+    c.blueBright,
+    c.dim,
+    c.magentaBright,
+    c.magentaBright
+  ];
+  const nameGrad = nameChars.map((ch, i) => nameColors[i](ch)).join(c.dim(" "));
+  const namePlain = "h l w - u n i - m p";
+  const badge = ` v${version} `;
+  const titleGap = W - 3 - namePlain.length - badge.length;
+  const titleLine = c.cyan("\u273B") + "  " + nameGrad + " ".repeat(Math.max(0, titleGap)) + c.bgCyan.black(badge);
+  const cmdColW = 16;
+  const cmdRow = (cmd, arg, desc) => {
+    const full = arg ? `${cmd} ${arg}` : cmd;
+    const padLen = Math.max(0, cmdColW - full.length);
+    const plain = `  \u276F  ${full}${" ".repeat(padLen)}${desc}`;
+    const colored = `  ${c.cyan("\u276F")}  ${c.bold.white(cmd)}` + (arg ? ` ${c.dim(arg)}` : "") + " ".repeat(padLen) + c.dim(desc);
+    row(plain, colored);
   };
   console.log();
-  console.log(rainbow("   \u2588\u2588\u2557  \u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2588\u2588\u2588\u2588\u2557 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557"));
-  console.log(rainbow("   \u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2550\u2588\u2588\u2557\u255A\u2550\u2550\u2588\u2588\u2554\u2550\u2550\u255D\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255D\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u2588\u2588\u2554\u2550\u2550\u2550\u2550\u255D"));
-  console.log(rainbow("   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2588\u2588\u2588\u2557  \u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255D\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557"));
-  console.log(rainbow("   \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2551   \u2588\u2588\u2554\u2550\u2550\u255D  \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2557\u255A\u2550\u2550\u2550\u2550\u2588\u2588\u2551"));
-  console.log(rainbow("   \u2588\u2588\u2551  \u2588\u2588\u2551\u255A\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255D   \u2588\u2588\u2551   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551"));
-  console.log(rainbow("   \u255A\u2550\u255D  \u255A\u2550\u255D \u255A\u2550\u2550\u2550\u2550\u2550\u255D    \u255A\u2550\u255D   \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u255D\u255A\u2550\u255D  \u255A\u2550\u255D\u255A\u2550\u2550\u2550\u2550\u2550\u2550\u255D"));
-  console.log();
-  console.log("   " + b("\u2554" + "\u2550".repeat(W) + "\u2557"));
-  const badge = ` ${version} `;
-  row(
-    `\u25C6  hlw-uni CLI  ${badge}`,
-    `${c.magentaBright("\u25C6")}  ${c.bold.white("hlw-uni")}  ${c.cyanBright("CLI")}  ${c.black.bgYellowBright(badge)}`
-  );
-  const subPlain = `   UniApp \u5C0F\u7A0B\u5E8F\u811A\u624B\u67B6\u751F\u6210\u5668`;
-  row(subPlain, `   ${c.dim.gray("UniApp")}   ${c.gray("\u5C0F\u7A0B\u5E8F\u811A\u624B\u67B6\u751F\u6210\u5668")}`);
-  console.log("   " + b("\u255A" + "\u2550".repeat(W) + "\u255D"));
-  console.log();
-  console.log("   " + c.dim.cyan("\u25B8") + " " + c.dim("hlw-uni-mp --help"));
+  console.log(`${ind}${c.dim("\u256D" + "\u2500".repeat(W + 2) + "\u256E")}`);
+  blank();
+  console.log(`${ind}${c.dim("\u2502")} ${titleLine} ${c.dim("\u2502")}`);
+  blank();
+  row("  UniApp \u5C0F\u7A0B\u5E8F\u811A\u624B\u67B6\u751F\u6210\u5668", `  ${c.white("UniApp \u5C0F\u7A0B\u5E8F\u811A\u624B\u67B6\u751F\u6210\u5668")}`);
+  blank();
+  cmdRow("create", "<name>", "\u5F00\u59CB\u521B\u5EFA\u65B0\u9879\u76EE");
+  cmdRow("--help", "", "\u67E5\u770B\u6240\u6709\u547D\u4EE4");
+  blank();
+  console.log(`${ind}${c.dim("\u2570" + "\u2500".repeat(W + 2) + "\u256F")}`);
   console.log();
 }
 var config = require_config();
