@@ -3,7 +3,7 @@ import { createPinia } from "pinia";
 import { createUnistorage } from "pinia-plugin-unistorage";
 import App from "./App.vue";
 import { setupDefaultInterceptors, hlw, http } from "@hlw-uni/mp-core";
-import { useUserStore } from "./stores/user";
+import { useUserStore } from "./store";
 
 // 注册默认拦截器（Token + 业务错误 + 401）
 setupDefaultInterceptors({
