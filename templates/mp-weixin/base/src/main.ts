@@ -2,18 +2,8 @@ import { createSSRApp } from "vue";
 import { createPinia } from "pinia";
 import { createUnistorage } from "pinia-plugin-unistorage";
 import App from "./App.vue";
-import { setupDefaultInterceptors, hlw, http } from "@hlw-uni/mp-core";
+import { setupDefaultInterceptors, hlw } from "@hlw-uni/mp-core";
 import { useUserStore } from "./store";
-
-// 注册默认拦截器（Token + 业务错误 + 401）
-setupDefaultInterceptors({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-    getToken: () => useUserStore().token,
-    onUnauthorized: () => {
-        useUserStore().$patch({ token: "", userInfo: null });
-    },
-    sigSecret: import.meta.env.VITE_SIG_SECRET,
-});
 
 export function createApp() {
     const app = createSSRApp(App);
@@ -23,9 +13,19 @@ export function createApp() {
     pinia.use(createUnistorage());
     app.use(pinia);
 
+    // 注册默认拦截器（Token + 业务错误 + 401）— 放在 pinia 初始化之后
+    setupDefaultInterceptors({
+        baseURL: import.meta.env.VITE_API_BASE_URL ?? "",
+        getToken: () => useUserStore().token,
+        onUnauthorized: () => {
+            useUserStore().$patch({ token: "", userInfo: null });
+        },
+        // @ts-ignore
+        sigSecret: import.meta.env.VITE_SIG_SECRET ?? "",
+    });
+
     // 挂载全局工具
     app.config.globalProperties["hlw"] = hlw;
 
     return { app };
 }
-

@@ -12,7 +12,7 @@
         "@dcloudio/uni-app-plus": "3.0.0-4080420251103001",
         "@dcloudio/uni-components": "3.0.0-4080420251103001",
         "@dcloudio/uni-mp-weixin": "3.0.0-4080420251103001",
-        "@hlw-uni/mp-core": "^1.0.10",
+        "@hlw-uni/mp-core": "^1.0.11",
         "@hlw-uni/mp-vue": "^1.0.3",
         "@vueuse/core": "^10.9.0",
         "pinia": "^2.1.7",
