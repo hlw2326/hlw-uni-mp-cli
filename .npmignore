@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Generated projects
+my-app/
+my-project/
+
+# Editor & IDE（根目录的 .vscode 不打包，但 templates 里的要保留）
+/.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Source TypeScript（已编译为 bin/cli.js）
+bin/cli.ts
+tsconfig.json

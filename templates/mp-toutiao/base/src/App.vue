@@ -13,5 +13,6 @@ onHide(() => {
 </script>
 
 <style lang="scss">
-@use './static/style/style.scss';
+@use "./static/css/style.scss";
+@use "./static/css/iconfont.css";
 </style>

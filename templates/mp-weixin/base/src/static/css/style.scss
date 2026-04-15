@@ -1,0 +1,45 @@
+view,
+text,
+button,
+scroll-view,
+image {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+// 屏蔽 button 默认边框
+button::after {
+    border: none;
+    display: none;
+}
+
+// 屏蔽所有元素的点击高亮效果
+view,
+text,
+button,
+image,
+scroll-view,
+navigator {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+// 移除点击时的背景阴影/高亮
+view:active,
+text:active,
+button:active,
+image:active,
+navigator:active {
+    background-color: transparent !important;
+    opacity: 1 !important;
+}
+
+page {
+    background-color: #f8f8f8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 28rpx;
+}

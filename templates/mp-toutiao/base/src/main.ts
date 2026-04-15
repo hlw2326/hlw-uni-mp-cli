@@ -4,6 +4,7 @@ import { createUnistorage } from "pinia-plugin-unistorage";
 import App from "./App.vue";
 import { setupDefaultInterceptors, hlw } from "@hlw-uni/mp-core";
 import { useUserStore } from "./store";
+import "virtual:uno.css";
 
 export function createApp() {
     const app = createSSRApp(App);

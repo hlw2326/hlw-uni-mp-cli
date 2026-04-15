@@ -1,7 +1,7 @@
 {
     "easycom": {
         "autoscan": true,
-        "regular": {
+        "custom": {
             "^u-(.*)": "@/components/u-$1/u-$1.vue",
             "^hlw-(.*)": "@hlw-uni/mp-vue/src/components/hlw-$1/index.vue"
         }
