@@ -1,6 +1,6 @@
 {
     "name": "@hlw-uni/mp-cli",
-    "version": "1.0.38",
+    "version": "1.0.39",
     "description": "uniapp 小程序脚手架生成器",
     "main": "bin/cli.js",
     "bin": {
@@ -10,7 +10,8 @@
         "dev": "tsx bin/cli.ts",
         "create": "tsx bin/cli.ts create",
         "build": "esbuild bin/cli.ts --bundle --platform=node --outfile=bin/cli.js --format=cjs --external:fs-extra --external:inquirer --external:chalk --external:commander --external:ora --external:path --external:fs",
-        "prepublish": "pnpm build",
+        "sync-versions": "node scripts/sync-template-versions.js",
+        "prepublish": "node scripts/sync-template-versions.js && pnpm build",
         "postbuild": "node scripts/fix-templates-path.js"
     },
     "keywords": [
