@@ -17,7 +17,7 @@ export function createApp() {
     // 注册默认拦截器（Token + 业务错误 + 401）— 放在 pinia 初始化之后
     setupDefaultInterceptors({
         baseURL: import.meta.env.VITE_API_BASE_URL ?? "",
-        getToken: () => useUserStore().token,
+        getToken: () => "TEST", //useUserStore().token,
         onUnauthorized: () => {
             useUserStore().$patch({ token: "", userInfo: null });
         },

@@ -12,7 +12,8 @@
         "build": "esbuild bin/cli.ts --bundle --platform=node --outfile=bin/cli.js --format=cjs --external:fs-extra --external:inquirer --external:chalk --external:commander --external:ora --external:path --external:fs",
         "sync-versions": "node scripts/sync-template-versions.js",
         "prepublish": "node scripts/sync-template-versions.js && pnpm build",
-        "postbuild": "node scripts/fix-templates-path.js"
+        "postbuild": "node scripts/fix-templates-path.js",
+        "publish:npm": "npm publish --access public"
     },
     "keywords": [
         "uniapp",

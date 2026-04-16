@@ -17,4 +17,25 @@ button::after {
 
 page {
     background-color: #f6f6f6;
+    font-family: "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "HarmonyOS Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    /* 圆角体系 */
+    --radius-xl: 32rpx;   /* 卡片外层 */
+    --radius-lg: 24rpx;   /* 卡片内层 / 子卡片 */
+    --radius-md: 16rpx;   /* 按钮 / 标签 */
+    --radius-sm: 8rpx;    /* 小元素 */
+
+    /* 边框颜色 */
+    --border-color: #e2e8f0;        /* 标准边框 */
+    --border-color-light: #f1f5f9;  /* 浅色边框 / 轻交互背景 */
+    --border-color-focus: #bfdbfe;  /* 焦点态边框 */
+
+    /* 字体大小 — 三档可覆盖：标准 / 大字体 / 超大字体 */
+    --font-xs:   20rpx;  /* 极小：角标、辅助标注 */
+    --font-sm:   24rpx;  /* 小号：次要说明、标签 */
+    --font-base: 28rpx;  /* 正文：菜单项、内容主体 */
+    --font-md:   32rpx;  /* 中等：次级标题 */
+    --font-lg:   36rpx;  /* 大号：页面标题 */
+    --font-xl:   40rpx;  /* 特大：数字展示 */
 }
