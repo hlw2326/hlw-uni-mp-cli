@@ -1,6 +1,6 @@
 {
     "name": "@hlw-uni/mp-cli",
-    "version": "1.0.40",
+    "version": "1.0.41",
     "description": "uniapp 小程序脚手架生成器",
     "main": "bin/cli.js",
     "bin": {

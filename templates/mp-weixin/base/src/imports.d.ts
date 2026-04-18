@@ -6,7 +6,6 @@
 export {}
 declare global {
   const computed: typeof import('vue')['computed']
-  const getPinia: typeof import('@hlw-uni/mp-core')['getPinia']
   const hlw: typeof import('@hlw-uni/mp-core')['hlw']
   const http: typeof import('@hlw-uni/mp-core')['http']
   const nextTick: typeof import('vue')['nextTick']
@@ -26,10 +25,10 @@ declare global {
   const onUnmounted: typeof import('vue')['onUnmounted']
   const reactive: typeof import('vue')['reactive']
   const ref: typeof import('vue')['ref']
+  const setupDefaultInterceptors: typeof import('@hlw-uni/mp-core')['setupDefaultInterceptors']
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const useApp: typeof import('@hlw-uni/mp-core')['useApp']
-  const useAppStore: typeof import('@hlw-uni/mp-core')['useAppStore']
   const useDevice: typeof import('@hlw-uni/mp-core')['useDevice']
   const useLoading: typeof import('@hlw-uni/mp-core')['useLoading']
   const useMsg: typeof import('@hlw-uni/mp-core')['useMsg']
@@ -37,7 +36,6 @@ declare global {
   const useRefs: typeof import('@hlw-uni/mp-core')['useRefs']
   const useRequest: typeof import('@hlw-uni/mp-core')['useRequest']
   const useUpload: typeof import('@hlw-uni/mp-core')['useUpload']
-  const useUserStore: typeof import('@hlw-uni/mp-core')['useUserStore']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
 }
@@ -47,7 +45,6 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
-    readonly getPinia: UnwrapRef<typeof import('@hlw-uni/mp-core')['getPinia']>
     readonly hlw: UnwrapRef<typeof import('@hlw-uni/mp-core')['hlw']>
     readonly http: UnwrapRef<typeof import('@hlw-uni/mp-core')['http']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
@@ -67,10 +64,10 @@ declare module 'vue' {
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
+    readonly setupDefaultInterceptors: UnwrapRef<typeof import('@hlw-uni/mp-core')['setupDefaultInterceptors']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly useApp: UnwrapRef<typeof import('@hlw-uni/mp-core')['useApp']>
-    readonly useAppStore: UnwrapRef<typeof import('@hlw-uni/mp-core')['useAppStore']>
     readonly useDevice: UnwrapRef<typeof import('@hlw-uni/mp-core')['useDevice']>
     readonly useLoading: UnwrapRef<typeof import('@hlw-uni/mp-core')['useLoading']>
     readonly useMsg: UnwrapRef<typeof import('@hlw-uni/mp-core')['useMsg']>
@@ -78,7 +75,6 @@ declare module 'vue' {
     readonly useRefs: UnwrapRef<typeof import('@hlw-uni/mp-core')['useRefs']>
     readonly useRequest: UnwrapRef<typeof import('@hlw-uni/mp-core')['useRequest']>
     readonly useUpload: UnwrapRef<typeof import('@hlw-uni/mp-core')['useUpload']>
-    readonly useUserStore: UnwrapRef<typeof import('@hlw-uni/mp-core')['useUserStore']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
   }

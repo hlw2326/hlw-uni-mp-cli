@@ -20,6 +20,11 @@ page {
     font-family: "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "HarmonyOS Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
 
+    /* 主题色 — 默认值，运行时通过 page-meta :page-style 覆盖 */
+    --primary-color: #3b82f6;
+    --primary-light: rgba(59, 130, 246, 0.12);
+    --primary-dark:  #2563eb;
+
     /* 圆角体系 */
     --radius-xl: 32rpx;   /* 卡片外层 */
     --radius-lg: 24rpx;   /* 卡片内层 / 子卡片 */
