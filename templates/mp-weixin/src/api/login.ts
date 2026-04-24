@@ -12,28 +12,37 @@ export interface LoginResult {
     user: Pick<UserInfo, "uid" | "nickname" | "avatar_url" | "phone" | "score" | "vip_time">;
 }
 
+/** 登录可选参数 */
+export interface LoginParams {
+    nickname?: string;
+    avatar_url?: string;
+    /** 邀请码（邀请人 uid）；仅新用户注册时后端会用到并发放奖励 */
+    invite_code?: string;
+}
+
 /**
  * 小程序登录
  * @param code wx.login 获取的 code
+ * @param params 可选昵称/头像/邀请码
  */
-export function login(code: string, nickname?: string, avatar_url?: string) {
+export function login(code: string, params: LoginParams = {}) {
     return http.request<LoginResult>({
         url: v1("login/in"),
         method: "POST",
-        data: { code, nickname, avatar_url },
+        data: { code, ...params },
     });
 }
 
 /**
  * 封装微信登录流程：wx.login → 调用后端
  */
-export function wxLogin(nickname?: string, avatar_url?: string) {
+export function wxLogin(params: LoginParams = {}) {
     return new Promise<LoginResult>((resolve, reject) => {
         uni.login({
             provider: "weixin",
             success: async (loginRes) => {
                 try {
-                    const res = await login(loginRes.code, nickname, avatar_url);
+                    const res = await login(loginRes.code, params);
                     resolve(res.data);
                 } catch (e) {
                     reject(e);

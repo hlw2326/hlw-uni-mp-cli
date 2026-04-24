@@ -24,12 +24,15 @@ export default {
         }),
     ],
     theme: {
+        // 字号全部走 CSS 变量，由 mp-vue/theme 的字体档位（small/normal/large/xlarge）
+        // 运行时注入 --font-* 驱动；style.scss 里的兜底值保证首屏不闪烁。
         fontSize: {
-            xs: ['20rpx', { 'line-height': '1.5' }],
-            sm: ['24rpx', { 'line-height': '1.5' }],
-            base: ['28rpx', { 'line-height': '1.5' }],
-            lg: ['32rpx', { 'line-height': '1.5' }],
-            xl: ['36rpx', { 'line-height': '1.5' }],
+            xs:   ['var(--font-xs)',   { 'line-height': '1.5' }],
+            sm:   ['var(--font-sm)',   { 'line-height': '1.5' }],
+            base: ['var(--font-base)', { 'line-height': '1.5' }],
+            md:   ['var(--font-md)',   { 'line-height': '1.5' }],
+            lg:   ['var(--font-lg)',   { 'line-height': '1.5' }],
+            xl:   ['var(--font-xl)',   { 'line-height': '1.5' }],
         },
         extend: {
             colors: {
@@ -195,6 +198,18 @@ export default {
         [/^w-h-([^-]+)-([^-]+)$/, ([, w, h]) => `w-${w} h-${h}`],
     ],
     rules: [
+        // 语义化排版 utility：一条规则覆盖 text-title-lg / text-title / text-subtitle / text-body / text-desc / text-caption
+        // 字号 / 字重 / 行高 / 颜色 四件套全部读 CSS 变量（变量在 static/css/style.scss 里定义，主题切换时只改变量不改 class）
+        [
+            /^text-(title-lg|title|subtitle|body|desc|caption)$/,
+            ([, name]) => ({
+                'font-size':   `var(--text-${name}-size)`,
+                'font-weight': `var(--text-${name}-weight)`,
+                'line-height': `var(--text-${name}-line-height)`,
+                color:         `var(--text-${name}-color)`,
+                ...(name === 'caption' ? { 'letter-spacing': '1rpx' } : {}),
+            }),
+        ],
         [/^fs-(\d+)$/, ([, d]) => ({ 'font-size': `${d}rpx` })],
         [/^lh-(\d+)$/, ([, d]) => ({ 'line-height': `${d}rpx` })],
         [/^ls-\[(.+)\]$/, ([, d]) => ({ 'letter-spacing': d })],
@@ -256,6 +271,15 @@ export default {
     safelist: [
         'text-primary', 'text-success', 'text-warning', 'text-error',
         'bg-primary', 'bg-success', 'bg-warning', 'bg-error',
+
+        // ===== 后端 DB 动态返回的 iconify 类名 =====
+        // UnoCSS 只扫描源码里字面量出现的 class 生成 CSS；
+        // 后台管理员从 iconify-picker 选图标存入 DB（user_menu/tools/course_platform/help_cate 等），
+        // 源码里看不到但运行时会用到，必须显式 safelist。新增图标时在下方追加字符串。
+        // 示例（取消注释按项目需要启用）：
+        // 'i-fa6-solid-gear',
+        // 'i-fa6-solid-headset',
+        // 'i-fa6-brands-weixin',
     ],
     transformers: [
         transformerDirectives({ enforce: 'pre' }),

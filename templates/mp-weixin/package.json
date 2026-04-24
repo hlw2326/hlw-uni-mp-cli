@@ -12,15 +12,16 @@
     "@dcloudio/uni-app-plus": "3.0.0-5000720260410001",
     "@dcloudio/uni-components": "3.0.0-5000720260410001",
     "@dcloudio/uni-mp-weixin": "3.0.0-5000720260410001",
-    "@hlw-uni/mp-core": "^1.0.34",
-    "@hlw-uni/mp-vue": "^1.2.21",
+    "@hlw-uni/mp-core": "^1.0.35",
+    "@hlw-uni/mp-vue": "^1.2.26",
     "@vueuse/core": "^10.11.1",
     "pinia": "^2.3.1",
     "pinia-plugin-unistorage": "^0.1.2",
-    "vue": "^3.5.32"
+    "vue": "^3.5.33",
+    "z-paging": "^2.8.8"
   },
   "devDependencies": {
-    "@dcloudio/types": "^3.4.30",
+    "@dcloudio/types": "^3.4.31",
     "@dcloudio/uni-cli-shared": "3.0.0-5000720260410001",
     "@dcloudio/vite-plugin-uni": "3.0.0-5000720260410001",
     "@hlw-uni/mp-vite-plugin": "^1.0.30",

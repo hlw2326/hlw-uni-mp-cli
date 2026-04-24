@@ -16,7 +16,7 @@ button::after {
 }
 
 page {
-    background-color: #f6f6f6;
+    background-color: var(--bg-page, #f6f6f6);
     font-family: "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "HarmonyOS Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
 
@@ -31,10 +31,28 @@ page {
     --radius-md: 16rpx;   /* 按钮 / 标签 */
     --radius-sm: 8rpx;    /* 小元素 */
 
-    /* 边框颜色 */
-    --border-color: #e2e8f0;        /* 标准边框 */
-    --border-color-light: #f1f5f9;  /* 浅色边框 / 轻交互背景 */
-    --border-color-focus: #bfdbfe;  /* 焦点态边框 */
+    /* ===== 卡片标准尺寸（主卡统一规范） =====
+     * 所有"典型卡片"都应用 --card-padding 和 --card-radius
+     * 非对称 padding（如 hero 大卡、弹窗）按需单独覆盖
+     */
+    --card-padding: 26rpx;
+    --card-radius:  32rpx;
+
+    /* 外观语义变量 — 默认浅色，运行时通过 page-meta 注入 dark 覆盖 */
+    --bg-page: #f6f6f6;
+    --bg-elevated: #ffffff;
+    --surface-card: #ffffff;
+    --surface-card-muted: #f8fafc;
+    --surface-secondary: #f1f5f9;
+    --surface-tertiary: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --text-subtle: #94a3b8;
+    --text-disabled: #cbd5e1;
+    --border-color: #e2e8f0;
+    --border-color-light: #f1f5f9;
+    --border-color-focus: #bfdbfe;
 
     /* 字体大小 — 三档可覆盖：标准 / 大字体 / 超大字体 */
     --font-xs:   20rpx;  /* 极小：角标、辅助标注 */
@@ -43,4 +61,44 @@ page {
     --font-md:   32rpx;  /* 中等：次级标题 */
     --font-lg:   36rpx;  /* 大号：页面标题 */
     --font-xl:   40rpx;  /* 特大：数字展示 */
+
+    /* ===== 语义化排版 token（默认值，运行时由主题库覆盖） =====
+     * 6 个角色：title-lg / title / subtitle / body / desc / caption
+     * 每个角色暴露 4 个变量：-size / -weight / -line-height / -color
+     * 用法见下方 .text-* utility class；也可直接在 scoped 样式里 var(--text-title-size) 消费
+     */
+    --text-title-lg-size:        var(--font-xl);
+    --text-title-lg-weight:      600;
+    --text-title-lg-line-height: 1.2;
+    --text-title-lg-color:       var(--text-primary);
+
+    --text-title-size:           var(--font-md);
+    --text-title-weight:         500;
+    --text-title-line-height:    1.3;
+    --text-title-color:          var(--text-primary);
+
+    --text-subtitle-size:        var(--font-base);
+    --text-subtitle-weight:      500;
+    --text-subtitle-line-height: 1.3;
+    --text-subtitle-color:       var(--text-secondary);
+
+    --text-body-size:            var(--font-base);
+    --text-body-weight:          400;
+    --text-body-line-height:     1.5;
+    --text-body-color:           var(--text-secondary);
+
+    --text-desc-size:            var(--font-sm);
+    --text-desc-weight:          400;
+    --text-desc-line-height:     1.4;
+    --text-desc-color:           var(--text-subtle);
+
+    --text-caption-size:         var(--font-xs);
+    --text-caption-weight:       500;
+    --text-caption-line-height:  1.3;
+    --text-caption-color:        var(--text-muted);
 }
+
+/*
+ * Typography utility classes（text-title-lg / text-title / text-subtitle / text-body / text-desc / text-caption）
+ * 已迁移到 unocss.config.ts 的 rules 里，由 UnoCSS 运行时生成，用法不变。
+ */

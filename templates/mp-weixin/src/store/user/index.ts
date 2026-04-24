@@ -1,8 +1,9 @@
 /**
- * User Pinia Store — token, userInfo, login/logout
+ * User Pinia Store — 只存数据，不写任何方法
+ * 派生计算与写入逻辑统一在 @/core/user 里封装为 useUser
  */
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import type { UserInfo } from "@/api/user";
 
 export const useUserStore = defineStore(
@@ -10,23 +11,13 @@ export const useUserStore = defineStore(
     () => {
         const token = ref("");
         const userInfo = ref<UserInfo | null>(null);
+        /**
+         * 邀请码：由 App.vue onLaunch/onShow 从启动 query 捕获，
+         * 首次登录时读取下发给后端，消费后清空。
+         */
+        const inviteCode = ref("");
 
-        /** 是否已登录 */
-        const isLoggedIn = computed(() => !!token.value);
-
-        /** 设置登录态 */
-        function setLogin(_token: string, user: UserInfo) {
-            token.value = _token;
-            userInfo.value = user;
-        }
-
-        /** 清除登录态 */
-        function clearLogin() {
-            token.value = "";
-            userInfo.value = null;
-        }
-
-        return { token, userInfo, isLoggedIn, setLogin, clearLogin };
+        return { token, userInfo, inviteCode };
     },
     { unistorage: true },
 );

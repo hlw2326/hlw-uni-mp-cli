@@ -1,4 +1,6 @@
 <template>
+    <!-- page-meta 注入主题变量到 page 级，scroll-view 内部也能继承 -->
+    <page-meta :page-style="themePageStyle" />
     <hlw-page title="用户中心" bg-class="header-bg">
         <view class="profile-card">
             <hlw-avatar name="海螺同学" size="large" />
@@ -17,6 +19,26 @@
 </template>
 
 <script setup lang="ts">
+import { onShow, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
+import { hlw } from "@hlw-uni/mp-core";
+import { useThemePageStyle } from "@hlw-uni/mp-vue";
+import { useUser } from "@/core";
+
+const { themePageStyle } = useThemePageStyle();
+const { getUserInfo } = useUser();
+
+/** 分享卡片：path 回落到首页，避免被分享到的新用户落到需要登录的"我的"页 */
+const share = () => ({
+    title: "换成你的小程序分享标题",
+    path: "/pages/index/index",
+});
+onShareAppMessage(share);
+onShareTimeline(share);
+
+onShow(() => {
+    getUserInfo();
+});
+
 const showToast = (title: string) => {
     hlw.$msg.toast(title);
 };

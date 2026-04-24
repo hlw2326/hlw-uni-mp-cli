@@ -9,19 +9,25 @@
         {
             "path": "pages/index/index",
             "style": {
-                "navigationBarTitleText": "首页"
+                "navigationBarTitleText": "首页",
+                "enableShareAppMessage": true,
+                "enableShareTimeline": true
             }
         },
         {
             "path": "pages/user/index",
             "style": {
-                "navigationBarTitleText": "我的"
+                "navigationBarTitleText": "我的",
+                "enableShareAppMessage": true,
+                "enableShareTimeline": true
             }
         },
         {
             "path": "pages/tools/index",
             "style": {
-                "navigationBarTitleText": "工具"
+                "navigationBarTitleText": "工具",
+                "enableShareAppMessage": true,
+                "enableShareTimeline": true
             }
         }
     ],
