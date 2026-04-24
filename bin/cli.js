@@ -40,68 +40,32 @@ var require_config = __commonJS({
       return fs2.readdirSync(TEMPLATES_DIR).filter((name) => {
         if (name === "config.js") return false;
         const fullPath = path2.join(TEMPLATES_DIR, name);
-        return fs2.statSync(fullPath).isDirectory();
+        if (!fs2.statSync(fullPath).isDirectory()) return false;
+        return fs2.existsSync(path2.join(fullPath, "package.json"));
       }).sort((a, b) => {
         if (a === "mp-weixin") return -1;
         if (b === "mp-weixin") return 1;
         return a.localeCompare(b);
       });
     }
-    function scanTemplates(platform) {
-      const platformDir = path2.join(TEMPLATES_DIR, platform);
-      if (!fs2.existsSync(platformDir)) return [];
-      return fs2.readdirSync(platformDir).filter((name) => {
-        if (name === "base") return false;
-        const fullPath = path2.join(platformDir, name);
-        return fs2.statSync(fullPath).isDirectory();
-      }).sort();
-    }
-    function readTemplateMeta(platform, templateId) {
-      const metaPath = path2.join(TEMPLATES_DIR, platform, templateId, "template.json");
-      if (fs2.existsSync(metaPath)) {
-        try {
-          return JSON.parse(fs2.readFileSync(metaPath, "utf-8"));
-        } catch {
-        }
-      }
-      return {};
-    }
     function getPlatformConfig2(platform) {
       const platformDir = path2.join(TEMPLATES_DIR, platform);
-      const basePath = path2.join(platformDir, "base");
-      if (!fs2.existsSync(platformDir) || !fs2.existsSync(basePath)) return null;
-      const templateIds = scanTemplates(platform);
-      const templates = templateIds.map((id) => {
-        const meta = readTemplateMeta(platform, id);
-        return {
-          id,
-          name: meta.name || `\u6A21\u677F ${id}`,
-          description: meta.description || ""
-        };
-      });
-      return { id: platform, name: PLATFORM_NAMES[platform] || platform, templates };
+      if (!fs2.existsSync(platformDir) || !fs2.existsSync(path2.join(platformDir, "package.json"))) return null;
+      return { id: platform, name: PLATFORM_NAMES[platform] || platform };
     }
     function getAllPlatformConfigs() {
       return scanPlatforms().map((id) => getPlatformConfig2(id)).filter(Boolean);
     }
-    function getStyleTemplate2(platform, templateId) {
-      const config2 = getPlatformConfig2(platform);
-      return config2?.templates.find((t) => t.id === templateId);
-    }
-    function getTemplatePaths2(platform, templateId) {
-      return {
-        basePath: path2.join(TEMPLATES_DIR, platform, "base"),
-        templatePath: path2.join(TEMPLATES_DIR, platform, templateId)
-      };
+    function getTemplatePath2(platform) {
+      return path2.join(TEMPLATES_DIR, platform);
     }
     var platformConfigs2 = getAllPlatformConfigs();
-    var platforms2 = platformConfigs2.map((p) => ({ id: p.id, name: p.name, templateCount: p.templates.length }));
+    var platforms2 = platformConfigs2.map((p) => ({ id: p.id, name: p.name }));
     module2.exports = {
       platforms: platforms2,
       platformConfigs: platformConfigs2,
       getPlatformConfig: getPlatformConfig2,
-      getStyleTemplate: getStyleTemplate2,
-      getTemplatePaths: getTemplatePaths2,
+      getTemplatePath: getTemplatePath2,
       getAllPlatformConfigs
     };
   }
@@ -271,17 +235,14 @@ var platformConfigs = config.platformConfigs;
 function getPlatformConfig(platform) {
   return config.getPlatformConfig(platform);
 }
-function getStyleTemplate(platform, templateId) {
-  return config.getStyleTemplate(platform, templateId);
-}
-function getTemplatePaths(platform, templateId) {
-  return config.getTemplatePaths(platform, templateId);
+function getTemplatePath(platform) {
+  return config.getTemplatePath(platform);
 }
 function isInteractive() {
   return !!process.stdin.isTTY;
 }
 async function runCreate(opts) {
-  const { name, description, author, platform, template } = opts;
+  const { name, description, author, platform } = opts;
   const projectPath = import_path.default.join(cwd, name);
   if (!isValidProjectName(name)) {
     console.log();
@@ -297,19 +258,16 @@ async function runCreate(opts) {
     console.log();
     return;
   }
-  const styleTemplate = getStyleTemplate(platform, template);
-  console.log(import_chalk.default.white(`[2/4] \u4F7F\u7528\u5E73\u53F0: ${getPlatformConfig(platform)?.name}\uFF0C\u6A21\u677F: ${styleTemplate?.name ?? template}`));
-  console.log(import_chalk.default.white("[3/4] \u914D\u7F6E\u9879\u76EE\u4FE1\u606F"));
+  console.log(import_chalk.default.white(`[2/3] \u914D\u7F6E\u9879\u76EE\u4FE1\u606F`));
   console.log(import_chalk.default.white(`  - \u9879\u76EE\u540D\u79F0: ${name}`));
   console.log(import_chalk.default.white(`  - \u9879\u76EE\u63CF\u8FF0: ${description}`));
   if (author) console.log(import_chalk.default.white(`  - \u4F5C\u8005: ${author}`));
   console.log();
-  console.log(import_chalk.default.white("[4/4] \u6B63\u5728\u521B\u5EFA\u9879\u76EE..."));
-  const { basePath, templatePath } = getTemplatePaths(platform, template);
+  console.log(import_chalk.default.white("[3/3] \u6B63\u5728\u521B\u5EFA\u9879\u76EE..."));
+  const templatePath = getTemplatePath(platform);
   const spinner = (0, import_ora.default)({ text: "  \u590D\u5236\u6A21\u677F\u6587\u4EF6...", spinner: "material", color: "cyan" }).start();
   await import_fs_extra.default.ensureDir(projectPath);
-  await copyDir(basePath, projectPath, { overwrite: true });
-  await copyDir(templatePath, projectPath, { overwrite: true, skipFiles: ["template.json"] });
+  await copyDir(templatePath, projectPath, { overwrite: true });
   await replaceTemplateVars(projectPath, {
     name,
     description,
@@ -320,18 +278,17 @@ async function runCreate(opts) {
   console.log();
   console.log(`  ${import_chalk.default.green("\u2713")}  ${import_chalk.default.bold.green("\u9879\u76EE\u521B\u5EFA\u6210\u529F")}  ${import_chalk.default.gray(`${name}`)}`);
   console.log();
-  console.log(`  ${import_chalk.default.cyan("\u25B8")}  ${import_chalk.default.gray("cd")} ${import_chalk.default.white(name)} ${import_chalk.default.gray("&& npm install && npm run dev:mp-weixin")}`);
+  console.log(`  ${import_chalk.default.cyan("\u25B8")}  ${import_chalk.default.gray("cd")} ${import_chalk.default.white(name)} ${import_chalk.default.gray(`&& npm install && npm run dev:${platform}`)}`);
   console.log();
 }
 var program = new import_commander.Command();
 program.name("hlw-uni-mp").description("UniApp \u5C0F\u7A0B\u5E8F\u811A\u624B\u67B6\u751F\u6210\u5668").version(version);
-program.command("create [name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u7684 uniapp \u9879\u76EE").option("-p, --platform <platform>", "\u6307\u5B9A\u5E73\u53F0 (mp-weixin/mp-toutiao)").option("-t, --template <template>", "\u6307\u5B9A\u6A21\u677F ID").option("-d, --description <description>", "\u9879\u76EE\u63CF\u8FF0").option("-a, --author <author>", "\u4F5C\u8005\u540D\u79F0").option("--ci", "\u975E\u4EA4\u4E92\u6A21\u5F0F\uFF0C\u4F7F\u7528\u9ED8\u8BA4\u9009\u9879").action(async (name, opts) => {
+program.command("create [name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u7684 uniapp \u9879\u76EE").option("-p, --platform <platform>", "\u6307\u5B9A\u5E73\u53F0 (mp-weixin/mp-toutiao)").option("-d, --description <description>", "\u9879\u76EE\u63CF\u8FF0").option("-a, --author <author>", "\u4F5C\u8005\u540D\u79F0").option("--ci", "\u975E\u4EA4\u4E92\u6A21\u5F0F\uFF0C\u4F7F\u7528\u9ED8\u8BA4\u9009\u9879").action(async (name, opts) => {
   try {
     printBanner();
     const options = {
       name: name || opts?.name,
       platform: opts?.platform,
-      template: opts?.template,
       description: opts?.description,
       author: opts?.author,
       ci: opts?.ci
@@ -341,9 +298,13 @@ program.command("create [name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u76
       console.log(`  ${import_chalk.default.yellow("\u26A1")}  ${import_chalk.default.yellow.bold("\u975E\u4EA4\u4E92\u6A21\u5F0F")}  ${import_chalk.default.gray("\u4F7F\u7528\u9ED8\u8BA4\u9009\u9879")}`);
       console.log();
       const platform2 = options.platform || platforms[0]?.id || "mp-weixin";
-      const platformConfig2 = getPlatformConfig(platform2);
-      const template2 = options.template || platformConfig2?.templates[0]?.id || "template1";
-      const styleTemplate = getStyleTemplate(platform2, template2);
+      if (!getPlatformConfig(platform2)) {
+        console.log();
+        console.log(`  ${import_chalk.default.red("\u2717")}  ${import_chalk.default.red.bold("\u672A\u77E5\u5E73\u53F0:")} ${import_chalk.default.red(platform2)}`);
+        console.log(import_chalk.default.gray("  (\u4EC5\u652F\u6301: mp-weixin / mp-toutiao)"));
+        console.log();
+        return;
+      }
       if (!isValidProjectName(options.name || "my-uniapp-app")) {
         console.log();
         console.log(`  ${import_chalk.default.red("\u2717")}  ${import_chalk.default.red.bold("\u65E0\u6548\u7684\u9879\u76EE\u540D\u79F0:")} ${import_chalk.default.red(options.name)}`);
@@ -355,21 +316,19 @@ program.command("create [name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u76
         name: options.name || "my-uniapp-app",
         description: options.description || "\u57FA\u4E8E hlw-uni \u811A\u624B\u67B6\u521B\u5EFA",
         author: options.author || "",
-        platform: platform2,
-        template: template2
+        platform: platform2
       });
       return;
     }
     let platform = options.platform || platforms[0]?.id;
-    let template = options.template;
-    console.log(import_chalk.default.white("[1/4] \u9009\u62E9\u76EE\u6807\u5E73\u53F0"));
+    console.log(import_chalk.default.white("[1/3] \u9009\u62E9\u76EE\u6807\u5E73\u53F0"));
     if (!options.platform) {
       const answer = await import_inquirer.default.prompt([{
         type: "list",
         name: "platform",
         message: "\u8BF7\u9009\u62E9\u76EE\u6807\u5E73\u53F0:",
         choices: platforms.map((p) => ({
-          name: `${p.name} (${p.templateCount} \u5957\u6A21\u677F)`,
+          name: p.name,
           value: p.id
         })),
         default: platforms[0]?.id
@@ -379,25 +338,14 @@ program.command("create [name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u76
       console.log(import_chalk.default.white(`  \u5DF2\u6307\u5B9A: ${platform}
 `));
     }
-    const platformConfig = getPlatformConfig(platform);
-    console.log(import_chalk.default.white(`[2/4] \u9009\u62E9 ${platformConfig.name} \u98CE\u683C\u6A21\u677F`));
-    if (!template) {
-      const answer = await import_inquirer.default.prompt([{
-        type: "list",
-        name: "template",
-        message: "\u8BF7\u9009\u62E9\u98CE\u683C\u6A21\u677F:",
-        choices: platformConfig.templates.map((t) => ({
-          name: t.name,
-          value: t.id
-        })),
-        default: platformConfig.templates[0]?.id
-      }]);
-      template = answer.template;
-    } else {
-      console.log(import_chalk.default.white(`  \u5DF2\u6307\u5B9A: ${template}
-`));
+    if (!getPlatformConfig(platform)) {
+      console.log();
+      console.log(`  ${import_chalk.default.red("\u2717")}  ${import_chalk.default.red.bold("\u672A\u77E5\u5E73\u53F0:")} ${import_chalk.default.red(platform)}`);
+      console.log(import_chalk.default.gray("  (\u4EC5\u652F\u6301: mp-weixin / mp-toutiao)"));
+      console.log();
+      return;
     }
-    console.log(import_chalk.default.white("[3/4] \u914D\u7F6E\u9879\u76EE\u4FE1\u606F"));
+    console.log(import_chalk.default.white("[2/3] \u914D\u7F6E\u9879\u76EE\u4FE1\u606F"));
     const answers = await import_inquirer.default.prompt([
       {
         type: "input",
@@ -423,8 +371,7 @@ program.command("create [name]").description("\u521B\u5EFA\u4E00\u4E2A\u65B0\u76
       name: answers.projectName,
       description: answers.description,
       author: answers.author,
-      platform,
-      template
+      platform
     });
   } catch (error) {
     console.log();
@@ -504,23 +451,20 @@ defineProps<{ title?: string }>()
   console.log(`  ${import_chalk.default.green("\u2713")}  ${import_chalk.default.bold.green(`${itemType}\u521B\u5EFA\u6210\u529F`)}  ${import_chalk.default.gray(`${itemName}`)}`);
   console.log();
 });
-program.command("list").description("\u5217\u51FA\u6240\u6709\u53EF\u7528\u7684\u5E73\u53F0\u548C\u6A21\u677F").action(() => {
+program.command("list").description("\u5217\u51FA\u6240\u6709\u53EF\u7528\u7684\u5E73\u53F0").action(() => {
   const W = 62;
   const c = import_chalk.default;
   console.log();
   console.log(c.cyan.bold("  " + "\u2550".repeat(W)));
   console.log();
-  console.log(c.cyan(`  ${"\u53EF\u7528\u7684\u5E73\u53F0\u548C\u6A21\u677F".padStart(30).padEnd(W)}`));
-  console.log(c.gray(`  ${"\u5B8C\u6574\u7684\u5E73\u53F0\u548C\u6A21\u677F\u5217\u8868".padStart(30).padEnd(W)}`));
+  console.log(c.cyan(`  ${"\u53EF\u7528\u7684\u5E73\u53F0".padStart(30).padEnd(W)}`));
+  console.log(c.gray(`  ${"\u5F53\u524D\u652F\u6301\u7684\u5E73\u53F0\u5217\u8868".padStart(30).padEnd(W)}`));
   console.log();
   console.log(c.cyan.bold("  " + "\u2550".repeat(W)));
   console.log();
   platformConfigs.forEach((platform) => {
-    console.log(`  ${import_chalk.default.bold.cyan("\u25B8")} ${import_chalk.default.bold.white(platform.name)}`);
-    platform.templates.forEach((t, i) => {
-      console.log(`    ${import_chalk.default.gray(`${i + 1}.`)} ${t.name}`);
-    });
-    console.log();
+    console.log(`  ${import_chalk.default.bold.cyan("\u25B8")} ${import_chalk.default.bold.white(platform.name)}  ${import_chalk.default.gray(platform.id)}`);
   });
+  console.log();
 });
 program.parse();

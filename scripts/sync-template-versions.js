@@ -53,7 +53,7 @@ const templates = fs.readdirSync(templatesDir);
 
 console.log('Syncing template versions...');
 for (const tpl of templates) {
-    const pkgFile = path.join(templatesDir, tpl, 'base', 'package.json');
+    const pkgFile = path.join(templatesDir, tpl, 'package.json');
     if (fs.existsSync(pkgFile)) {
         syncTemplate(pkgFile);
     }

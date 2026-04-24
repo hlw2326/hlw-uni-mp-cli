@@ -9,9 +9,8 @@ import ora from 'ora';
 import path from 'path';
 import fs from 'fs-extra';
 
-interface Platform { id: string; name: string; templateCount: number; }
-interface Template { id: string; name: string; description: string; }
-interface PlatformConfig { id: string; name: string; templates: Template[]; }
+interface Platform { id: string; name: string; }
+interface PlatformConfig { id: string; name: string; }
 
 const cwd = process.cwd();
 const version = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8')).version;
@@ -168,7 +167,7 @@ function printBanner() {
   console.log();
 }
 
-// 加载模板配置
+// 加载平台配置
 const config = require('../templates/config');
 const platforms = config.platforms as Platform[];
 const platformConfigs = config.platformConfigs as PlatformConfig[];
@@ -177,12 +176,8 @@ function getPlatformConfig(platform: string): PlatformConfig | null {
   return config.getPlatformConfig(platform);
 }
 
-function getStyleTemplate(platform: string, templateId: string): Template | undefined {
-  return config.getStyleTemplate(platform, templateId);
-}
-
-function getTemplatePaths(platform: string, templateId: string) {
-  return config.getTemplatePaths(platform, templateId);
+function getTemplatePath(platform: string): string {
+  return config.getTemplatePath(platform);
 }
 
 function isInteractive(): boolean {
@@ -194,9 +189,8 @@ async function runCreate(opts: {
   description: string;
   author: string;
   platform: string;
-  template: string;
 }) {
-  const { name, description, author, platform, template } = opts;
+  const { name, description, author, platform } = opts;
   const projectPath = path.join(cwd, name);
 
   if (!isValidProjectName(name)) {
@@ -215,23 +209,19 @@ async function runCreate(opts: {
     return;
   }
 
-  const styleTemplate = getStyleTemplate(platform, template) as Template;
-
-  console.log(chalk.white(`[2/4] 使用平台: ${getPlatformConfig(platform)?.name}，模板: ${styleTemplate?.name ?? template}`));
-  console.log(chalk.white('[3/4] 配置项目信息'));
+  console.log(chalk.white(`[2/3] 配置项目信息`));
   console.log(chalk.white(`  - 项目名称: ${name}`));
   console.log(chalk.white(`  - 项目描述: ${description}`));
   if (author) console.log(chalk.white(`  - 作者: ${author}`));
   console.log();
 
-  console.log(chalk.white('[4/4] 正在创建项目...'));
+  console.log(chalk.white('[3/3] 正在创建项目...'));
 
-  const { basePath, templatePath } = getTemplatePaths(platform, template);
+  const templatePath = getTemplatePath(platform);
   const spinner = ora({ text: '  复制模板文件...', spinner: 'material', color: 'cyan' }).start();
 
   await fs.ensureDir(projectPath);
-  await copyDir(basePath as string, projectPath, { overwrite: true });
-  await copyDir(templatePath as string, projectPath, { overwrite: true, skipFiles: ['template.json'] });
+  await copyDir(templatePath, projectPath, { overwrite: true });
 
   await replaceTemplateVars(projectPath, {
     name,
@@ -244,7 +234,7 @@ async function runCreate(opts: {
   console.log();
   console.log(`  ${chalk.green('✓')}  ${chalk.bold.green('项目创建成功')}  ${chalk.gray(`${name}`)}`);
   console.log();
-  console.log(`  ${chalk.cyan('▸')}  ${chalk.gray('cd')} ${chalk.white(name)} ${chalk.gray('&& npm install && npm run dev:mp-weixin')}`);
+  console.log(`  ${chalk.cyan('▸')}  ${chalk.gray('cd')} ${chalk.white(name)} ${chalk.gray(`&& npm install && npm run dev:${platform}`)}`);
   console.log();
 }
 
@@ -258,7 +248,6 @@ program
   .command('create [name]')
   .description('创建一个新的 uniapp 项目')
   .option('-p, --platform <platform>', '指定平台 (mp-weixin/mp-toutiao)')
-  .option('-t, --template <template>', '指定模板 ID')
   .option('-d, --description <description>', '项目描述')
   .option('-a, --author <author>', '作者名称')
   .option('--ci', '非交互模式，使用默认选项')
@@ -269,7 +258,6 @@ program
       const options = {
         name: name || (opts?.name as string | undefined),
         platform: opts?.platform as string | undefined,
-        template: opts?.template as string | undefined,
         description: opts?.description as string | undefined,
         author: opts?.author as string | undefined,
         ci: opts?.ci as boolean | undefined,
@@ -282,9 +270,14 @@ program
         console.log();
 
         const platform = options.platform || platforms[0]?.id || 'mp-weixin';
-        const platformConfig = getPlatformConfig(platform);
-        const template = options.template || platformConfig?.templates[0]?.id || 'template1';
-        const styleTemplate = getStyleTemplate(platform, template) as Template;
+
+        if (!getPlatformConfig(platform)) {
+          console.log();
+          console.log(`  ${chalk.red('✗')}  ${chalk.red.bold('未知平台:')} ${chalk.red(platform)}`);
+          console.log(chalk.gray('  (仅支持: mp-weixin / mp-toutiao)'));
+          console.log();
+          return;
+        }
 
         if (!isValidProjectName(options.name || 'my-uniapp-app')) {
           console.log();
@@ -299,22 +292,20 @@ program
           description: options.description || '基于 hlw-uni 脚手架创建',
           author: options.author || '',
           platform,
-          template,
         });
         return;
       }
 
       let platform = options.platform || platforms[0]?.id;
-      let template = options.template;
 
-      console.log(chalk.white('[1/4] 选择目标平台'));
+      console.log(chalk.white('[1/3] 选择目标平台'));
       if (!options.platform) {
         const answer = await inquirer.prompt([{
           type: 'list',
           name: 'platform',
           message: '请选择目标平台:',
           choices: platforms.map((p: Platform) => ({
-            name: `${p.name} (${p.templateCount} 套模板)`,
+            name: p.name,
             value: p.id,
           })),
           default: platforms[0]?.id,
@@ -324,26 +315,15 @@ program
         console.log(chalk.white(`  已指定: ${platform}\n`));
       }
 
-      const platformConfig = getPlatformConfig(platform!) as PlatformConfig;
-
-      console.log(chalk.white(`[2/4] 选择 ${platformConfig.name} 风格模板`));
-      if (!template) {
-        const answer = await inquirer.prompt([{
-          type: 'list',
-          name: 'template',
-          message: '请选择风格模板:',
-          choices: platformConfig.templates.map((t: Template) => ({
-            name: t.name,
-            value: t.id,
-          })),
-          default: platformConfig.templates[0]?.id,
-        }]);
-        template = answer.template;
-      } else {
-        console.log(chalk.white(`  已指定: ${template}\n`));
+      if (!getPlatformConfig(platform!)) {
+        console.log();
+        console.log(`  ${chalk.red('✗')}  ${chalk.red.bold('未知平台:')} ${chalk.red(platform)}`);
+        console.log(chalk.gray('  (仅支持: mp-weixin / mp-toutiao)'));
+        console.log();
+        return;
       }
 
-      console.log(chalk.white('[3/4] 配置项目信息'));
+      console.log(chalk.white('[2/3] 配置项目信息'));
       const answers = await inquirer.prompt([
         {
           type: 'input',
@@ -371,7 +351,6 @@ program
         description: answers.description,
         author: answers.author,
         platform: platform!,
-        template: template!,
       });
     } catch (error) {
       console.log();
@@ -466,7 +445,7 @@ defineProps<{ title?: string }>()
 
 program
   .command('list')
-  .description('列出所有可用的平台和模板')
+  .description('列出所有可用的平台')
   .action(() => {
     const W = 62;
     const c = chalk;
@@ -474,18 +453,15 @@ program
     console.log();
     console.log(c.cyan.bold('  ' + '═'.repeat(W)));
     console.log();
-    console.log(c.cyan(`  ${'可用的平台和模板'.padStart(30).padEnd(W)}`));
-    console.log(c.gray(`  ${'完整的平台和模板列表'.padStart(30).padEnd(W)}`));
+    console.log(c.cyan(`  ${'可用的平台'.padStart(30).padEnd(W)}`));
+    console.log(c.gray(`  ${'当前支持的平台列表'.padStart(30).padEnd(W)}`));
     console.log();
     console.log(c.cyan.bold('  ' + '═'.repeat(W)));
     console.log();
     platformConfigs.forEach((platform: PlatformConfig) => {
-      console.log(`  ${chalk.bold.cyan('▸')} ${chalk.bold.white(platform.name)}`);
-      platform.templates.forEach((t: Template, i: number) => {
-        console.log(`    ${chalk.gray(`${i + 1}.`)} ${t.name}`);
-      });
-      console.log();
+      console.log(`  ${chalk.bold.cyan('▸')} ${chalk.bold.white(platform.name)}  ${chalk.gray(platform.id)}`);
     });
+    console.log();
   });
 
 program.parse();

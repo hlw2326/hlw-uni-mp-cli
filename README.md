@@ -22,7 +22,7 @@ npx -y @hlw-uni/mp-cli@latest create my-project
 | `hlw-uni-mp create [name] --ci`   | 非交互模式创建，使用默认选项        |
 | `hlw-uni-mp add page <name>`      | 添加新页面（自动注册到 pages.json） |
 | `hlw-uni-mp add component <name>` | 添加新组件                          |
-| `hlw-uni-mp list`                 | 列出所有可用平台和模板              |
+| `hlw-uni-mp list`                 | 列出所有可用平台                    |
 | `hlw-uni-mp --help`               | 显示帮助信息                        |
 
 ### create 命令选项
@@ -30,7 +30,6 @@ npx -y @hlw-uni/mp-cli@latest create my-project
 | 选项                              | 说明                                  |
 | --------------------------------- | ------------------------------------- |
 | `-p, --platform <platform>`       | 指定平台 (`mp-weixin` / `mp-toutiao`) |
-| `-t, --template <template>`       | 指定模板 ID                           |
 | `-d, --description <description>` | 项目描述                              |
 | `-a, --author <author>`           | 作者名称                              |
 | `--ci`                            | 非交互模式，自动使用默认选项          |
@@ -41,13 +40,13 @@ npx -y @hlw-uni/mp-cli@latest create my-project
 # 交互式创建（需在支持上下箭头选择的终端中运行）
 hlw-uni-mp create
 
-# 指定名称创建（非交互，自动使用默认平台和模板）
+# 指定名称创建
 hlw-uni-mp create my-project
 
-# 指定全部参数（非交互，自动使用指定选项）
-hlw-uni-mp create -p mp-weixin -t template1 -d "我的项目" -a "作者名" my-project
+# 指定平台创建（非交互）
+hlw-uni-mp create -p mp-weixin -d "我的项目" -a "作者名" my-project
 
-# 非交互模式显式指定
+# 非交互模式（默认使用 mp-weixin）
 hlw-uni-mp create --ci my-project
 
 # 添加页面
@@ -67,11 +66,9 @@ hlw-uni-mp list
 | 微信小程序 | `mp-weixin`  | 微信小程序模板 |
 | 抖音小程序 | `mp-toutiao` | 抖音小程序模板 |
 
-## 模板
+每个平台对应一套开箱即用的 UniApp 项目模板，无需再选择风格模板。
 
-每个平台提供多种风格模板，创建项目时可选择。
-
-生成的模板预配置：
+生成的项目预配置：
 
 - **Vite + uni-app** — 快速构建
 - **Pinia** — 状态管理
