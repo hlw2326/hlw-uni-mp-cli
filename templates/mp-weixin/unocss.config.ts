@@ -26,13 +26,27 @@ export default {
     theme: {
         // 字号全部走 CSS 变量，由 mp-vue/theme 的字体档位（small/normal/large/xlarge）
         // 运行时注入 --font-* 驱动；style.scss 里的兜底值保证首屏不闪烁。
+        // 档位由 mp-vue/font.ts 定义，六档对应 --font-xs..xl。
         fontSize: {
+            // 主题档：跟随 mp-vue 字号偏好缩放
             xs:   ['var(--font-xs)',   { 'line-height': '1.5' }],
             sm:   ['var(--font-sm)',   { 'line-height': '1.5' }],
             base: ['var(--font-base)', { 'line-height': '1.5' }],
             md:   ['var(--font-md)',   { 'line-height': '1.5' }],
             lg:   ['var(--font-lg)',   { 'line-height': '1.5' }],
             xl:   ['var(--font-xl)',   { 'line-height': '1.5' }],
+            // 原子档：text-20/22/.../40，绝对值不跟主题切换
+            20: ['var(--font-20)', { 'line-height': '1.5' }],
+            22: ['var(--font-22)', { 'line-height': '1.5' }],
+            24: ['var(--font-24)', { 'line-height': '1.5' }],
+            26: ['var(--font-26)', { 'line-height': '1.5' }],
+            28: ['var(--font-28)', { 'line-height': '1.5' }],
+            30: ['var(--font-30)', { 'line-height': '1.5' }],
+            32: ['var(--font-32)', { 'line-height': '1.5' }],
+            34: ['var(--font-34)', { 'line-height': '1.5' }],
+            36: ['var(--font-36)', { 'line-height': '1.5' }],
+            38: ['var(--font-38)', { 'line-height': '1.5' }],
+            40: ['var(--font-40)', { 'line-height': '1.5' }],
         },
         extend: {
             colors: {
@@ -274,12 +288,65 @@ export default {
 
         // ===== 后端 DB 动态返回的 iconify 类名 =====
         // UnoCSS 只扫描源码里字面量出现的 class 生成 CSS；
-        // 后台管理员从 iconify-picker 选图标存入 DB（user_menu/tools/course_platform/help_cate 等），
-        // 源码里看不到但运行时会用到，必须显式 safelist。新增图标时在下方追加字符串。
-        // 示例（取消注释按项目需要启用）：
-        // 'i-fa6-solid-gear',
-        // 'i-fa6-solid-headset',
-        // 'i-fa6-brands-weixin',
+        // 下面这些图标由后台管理员选择存在数据库里（user_menu/tools/course_platform/help_cate 等），
+        // 源码里看不到但运行时会用到，必须显式 safelist。
+        // 新增图标时在这里追加字符串即可。
+
+        // user_menu 默认 6 项
+        'i-fa6-solid-headset',
+        'i-fa6-brands-weixin',
+        'i-fa6-solid-user-plus',
+        'i-fa6-solid-book-open',
+        'i-fa6-solid-circle-question',
+        'i-fa6-solid-gear',
+
+        // tools 默认工具
+        'i-fa6-solid-droplet-slash',
+        'i-fa6-solid-chart-line',
+        'i-fa6-solid-trophy',
+        'i-fa6-solid-toolbox',
+
+        // notice-popup 按类型切图标（type = system / activity / update）
+        'i-fa6-solid-gift',
+
+        // card 兑换中心（兑换码 / 积分充值码）
+        'i-fa6-solid-ticket',
+        'i-fa6-solid-bolt',
+
+        // course_platform 默认平台
+        'i-fa6-brands-tiktok',
+        'i-fa6-brands-bilibili',
+        'i-fa6-solid-video',
+
+        // help_cate 默认分类
+        'i-fa6-solid-rocket',
+        'i-fa6-solid-gem',
+        'i-fa6-solid-shield-halved',
+
+        // help 文章常用图标
+        'i-fa6-solid-hand',
+        'i-fa6-solid-magnifying-glass',
+        'i-fa6-solid-star',
+        'i-fa6-solid-lightbulb',
+        'i-fa6-solid-fire',
+        'i-fa6-solid-download',
+        'i-fa6-solid-coins',
+        'i-fa6-solid-crown',
+        'i-fa6-solid-credit-card',
+        'i-fa6-solid-user-slash',
+        'i-fa6-solid-file-shield',
+        'i-fa6-solid-lock',
+
+        'i-fa6-solid-infinity',
+        'i-fa6-solid-ban',
+
+        'i-fa6-solid-scale-balanced',
+        'i-fa6-solid-sack-dollar',
+        'i-fa6-solid-clock',
+        'i-fa6-solid-ranking-star',
+        'i-fa6-solid-shield-heart',
+        'i-fa6-solid-chart-pie',
+        'i-fa6-solid-layer-group',
     ],
     transformers: [
         transformerDirectives({ enforce: 'pre' }),

@@ -54,7 +54,14 @@ page {
     --border-color-light: #f1f5f9;
     --border-color-focus: #bfdbfe;
 
-    /* 字体大小 — 三档可覆盖：标准 / 大字体 / 超大字体 */
+    /* ===== 字体大小 — 两套并存 =====
+     *
+     * (A) 主题档：6 档 xs/sm/base/md/lg/xl，会被 mp-vue 字体档位（较小/标准/较大…）运行时覆盖
+     *     适合：跟主题字号偏好联动的常规文字（菜单、正文、标题等）
+     *
+     * (B) 原子档：11 档 20..40rpx，2rpx 步进，绝对值不参与主题切换
+     *     适合：需要精确字号的角标、价格、对比表等不希望被字号偏好放大的元素
+     */
     --font-xs:   20rpx;  /* 极小：角标、辅助标注 */
     --font-sm:   24rpx;  /* 小号：次要说明、标签 */
     --font-base: 28rpx;  /* 正文：菜单项、内容主体 */
@@ -62,37 +69,50 @@ page {
     --font-lg:   36rpx;  /* 大号：页面标题 */
     --font-xl:   40rpx;  /* 特大：数字展示 */
 
+    --font-20: 20rpx;
+    --font-22: 22rpx;
+    --font-24: 24rpx;
+    --font-26: 26rpx;
+    --font-28: 28rpx;
+    --font-30: 30rpx;
+    --font-32: 32rpx;
+    --font-34: 34rpx;
+    --font-36: 36rpx;
+    --font-38: 38rpx;
+    --font-40: 40rpx;
+
     /* ===== 语义化排版 token（默认值，运行时由主题库覆盖） =====
      * 6 个角色：title-lg / title / subtitle / body / desc / caption
+     * 字号锚点 title=28rpx；其他档位以 2rpx 步进编排，整套用 11 档原子档（绝对值，不跟主题档位缩放）。
      * 每个角色暴露 4 个变量：-size / -weight / -line-height / -color
-     * 用法见下方 .text-* utility class；也可直接在 scoped 样式里 var(--text-title-size) 消费
+     * 用法见 .text-* utility class；也可直接在 scoped 样式里 var(--text-title-size) 消费
      */
-    --text-title-lg-size:        var(--font-xl);
+    --text-title-lg-size:        var(--font-30);   /* 30rpx，标题大一档 */
     --text-title-lg-weight:      600;
     --text-title-lg-line-height: 1.2;
     --text-title-lg-color:       var(--text-primary);
 
-    --text-title-size:           var(--font-md);
-    --text-title-weight:         500;
+    --text-title-size:           var(--font-28);   /* 28rpx ← 锚点 */
+    --text-title-weight:         600;
     --text-title-line-height:    1.3;
     --text-title-color:          var(--text-primary);
 
-    --text-subtitle-size:        var(--font-base);
-    --text-subtitle-weight:      500;
-    --text-subtitle-line-height: 1.3;
-    --text-subtitle-color:       var(--text-secondary);
-
-    --text-body-size:            var(--font-base);
-    --text-body-weight:          400;
-    --text-body-line-height:     1.5;
-    --text-body-color:           var(--text-secondary);
-
-    --text-desc-size:            var(--font-sm);
+    --text-desc-size:            var(--font-26);   /* 26rpx，正文 / 段落描述 */
     --text-desc-weight:          400;
     --text-desc-line-height:     1.4;
     --text-desc-color:           var(--text-subtle);
 
-    --text-caption-size:         var(--font-xs);
+    --text-body-size:            var(--font-26);   /* 26rpx，同 desc 字号，color 更深一些 */
+    --text-body-weight:          400;
+    --text-body-line-height:     1.5;
+    --text-body-color:           var(--text-secondary);
+
+    --text-subtitle-size:        var(--font-24);   /* 24rpx，副标题 / 弱化说明 */
+    --text-subtitle-weight:      500;
+    --text-subtitle-line-height: 1.3;
+    --text-subtitle-color:       var(--text-secondary);
+
+    --text-caption-size:         var(--font-22);   /* 22rpx，最小，角标/辅助说明 */
     --text-caption-weight:       500;
     --text-caption-line-height:  1.3;
     --text-caption-color:        var(--text-muted);
