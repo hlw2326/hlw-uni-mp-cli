@@ -347,6 +347,12 @@ export default {
         'i-fa6-solid-shield-heart',
         'i-fa6-solid-chart-pie',
         'i-fa6-solid-layer-group',
+        'i-fa6-solid-gauge-high',
+        'i-fa6-solid-wand-magic-sparkles',
+        'i-fa6-brands-weibo',
+        'i-fa6-solid-circle-play',
+        'i-fa6-solid-chevron-right',
+        'i-fa6-solid-box-open',
     ],
     transformers: [
         transformerDirectives({ enforce: 'pre' }),

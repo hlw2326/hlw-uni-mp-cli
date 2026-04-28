@@ -13,6 +13,8 @@ export interface UserInfo {
     phone: string;
     score: number;
     vip_time: number;
+    /** 1=该用户强制屏蔽展示型广告（优先级高于 mp.vip_no_ad），0=默认 */
+    vip_no_ad: number;
     /** 0 保密 / 1 男 / 2 女 */
     gender: number;
     /** YYYY-MM-DD，空串表示未填写 */

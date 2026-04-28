@@ -1,6 +1,6 @@
 {
-    "name": "uni-preset-vue",
-    "version": "0.0.0",
+    "name": "mp-uni-qz",
+    "version": "1.0.11",
     "private": true,
     "scripts": {
         "dev": "uni -p mp-weixin --mode dev",
@@ -12,8 +12,7 @@
         "@dcloudio/uni-app-plus": "3.0.0-5000720260410001",
         "@dcloudio/uni-components": "3.0.0-5000720260410001",
         "@dcloudio/uni-mp-weixin": "3.0.0-5000720260410001",
-        "@hlw-uni/mp-core": "^1.0.36",
-        "@hlw-uni/mp-vue": "^1.2.28",
+        "@hlw-uni/mp-vue": "^2.1.25",
         "@vueuse/core": "^10.11.1",
         "pinia": "^2.3.1",
         "pinia-plugin-unistorage": "^0.1.2",
@@ -24,7 +23,7 @@
         "@dcloudio/types": "^3.4.31",
         "@dcloudio/uni-cli-shared": "3.0.0-5000720260410001",
         "@dcloudio/vite-plugin-uni": "3.0.0-5000720260410001",
-        "@hlw-uni/mp-vite-plugin": "^1.0.30",
+        "@hlw-uni/mp-vite-plugin": "^1.0.33",
         "@iconify-json/fa6-brands": "^1.2.6",
         "@iconify-json/fa6-solid": "^1.2.4",
         "@iconify-json/ri": "^1.2.10",

@@ -77,6 +77,8 @@ export function useUser() {
     const uid = computed(() => userInfo.value?.uid || "--");
     /** 是否 VIP：vip_time 秒级时间戳大于当前时间 */
     const isVip = computed(() => (userInfo.value?.vip_time ?? 0) > Math.floor(Date.now() / 1000));
+    /** 用户级强制屏蔽广告（后台用户表 vip_no_ad=1） */
+    const noAd  = computed(() => (userInfo.value?.vip_no_ad ?? 0) === 1);
 
     /** 登录成功：同时写入 token 和用户信息 */
     function setLogin(newToken: string, info: UserInfo): void {
@@ -138,6 +140,7 @@ export function useUser() {
         avatarUrl,
         uid,
         isVip,
+        noAd,
         // 写入方法
         setLogin,
         setUserInfo,
