@@ -16,7 +16,7 @@ button::after {
 }
 
 page {
-    background-color: var(--bg-page, #f6f6f6);
+    background-color: var(--bg-page, #f8fafc);
     font-family: "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "HarmonyOS Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
 
@@ -26,10 +26,11 @@ page {
     --primary-dark:  #2563eb;
 
     /* 圆角体系 */
-    --radius-xl: 32rpx;   /* 卡片外层 */
-    --radius-lg: 24rpx;   /* 卡片内层 / 子卡片 */
-    --radius-md: 16rpx;   /* 按钮 / 标签 */
-    --radius-sm: 8rpx;    /* 小元素 */
+    --radius-xl:   32rpx;   /* 卡片外层 */
+    --radius-lg:   24rpx;   /* 卡片内层 / 子卡片 */
+    --radius-md:   16rpx;   /* 按钮 / 标签 */
+    --radius-sm:   8rpx;    /* 小元素 */
+    --radius-full: 9999rpx; /* 胶囊 / 进度条 / Pill 标签 */
 
     /* ===== 卡片标准尺寸（主卡统一规范） =====
      * 所有"典型卡片"都应用 --card-padding 和 --card-radius
@@ -39,7 +40,7 @@ page {
     --card-radius:  32rpx;
 
     /* 外观语义变量 — 默认浅色，运行时通过 page-meta 注入 dark 覆盖 */
-    --bg-page: #f6f6f6;
+    --bg-page: #f8fafc;
     --bg-elevated: #ffffff;
     --surface-card: #ffffff;
     --surface-card-muted: #f8fafc;
@@ -83,36 +84,36 @@ page {
 
     /* ===== 语义化排版 token（默认值，运行时由主题库覆盖） =====
      * 6 个角色：title-lg / title / subtitle / body / desc / caption
-     * 字号锚点 title=28rpx；其他档位以 2rpx 步进编排，整套用 11 档原子档（绝对值，不跟主题档位缩放）。
+     * 字号统一引用「主题档」--font-xs..--font-xl，跟字体档位偏好（较小/标准/超大…）联动缩放。
      * 每个角色暴露 4 个变量：-size / -weight / -line-height / -color
      * 用法见 .text-* utility class；也可直接在 scoped 样式里 var(--text-title-size) 消费
      */
-    --text-title-lg-size:        var(--font-30);   /* 30rpx，标题大一档 */
+    --text-title-lg-size:        var(--font-xl);
     --text-title-lg-weight:      600;
     --text-title-lg-line-height: 1.2;
     --text-title-lg-color:       var(--text-primary);
 
-    --text-title-size:           var(--font-28);   /* 28rpx ← 锚点 */
+    --text-title-size:           var(--font-md);
     --text-title-weight:         600;
     --text-title-line-height:    1.3;
     --text-title-color:          var(--text-primary);
 
-    --text-desc-size:            var(--font-26);   /* 26rpx，正文 / 段落描述 */
-    --text-desc-weight:          400;
-    --text-desc-line-height:     1.4;
-    --text-desc-color:           var(--text-subtle);
-
-    --text-body-size:            var(--font-26);   /* 26rpx，同 desc 字号，color 更深一些 */
-    --text-body-weight:          400;
-    --text-body-line-height:     1.5;
-    --text-body-color:           var(--text-secondary);
-
-    --text-subtitle-size:        var(--font-24);   /* 24rpx，副标题 / 弱化说明 */
+    --text-subtitle-size:        var(--font-base);
     --text-subtitle-weight:      500;
     --text-subtitle-line-height: 1.3;
     --text-subtitle-color:       var(--text-secondary);
 
-    --text-caption-size:         var(--font-22);   /* 22rpx，最小，角标/辅助说明 */
+    --text-body-size:            var(--font-base);
+    --text-body-weight:          400;
+    --text-body-line-height:     1.5;
+    --text-body-color:           var(--text-secondary);
+
+    --text-desc-size:            var(--font-sm);
+    --text-desc-weight:          400;
+    --text-desc-line-height:     1.4;
+    --text-desc-color:           var(--text-subtle);
+
+    --text-caption-size:         var(--font-xs);
     --text-caption-weight:       500;
     --text-caption-line-height:  1.3;
     --text-caption-color:        var(--text-muted);

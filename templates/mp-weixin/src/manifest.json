@@ -7,11 +7,13 @@
     "transformPx": false,
     "mp-weixin": {
         "appid": "wx0c1972421f064dde",
-        "libVersion": "3.9.3",
+        "libVersion": "2.32.3",
         "setting": {
             "urlCheck": false,
             "postcss": true,
-            "minified": true
+            "minified": true,
+            "ignoreDevUnusedFiles": false,
+            "ignoreUploadUnusedFiles": false
         },
         "usingComponents": true
     }
