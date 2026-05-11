@@ -1,6 +1,6 @@
 /// <reference types="@dcloudio/types" />
 /// <reference types="vite/client" />
-/// <reference types="@hlw-uni/mp-core/types/global" />
+/// <reference types="@hlw-uni/mp-vue/types/global" />
 
 interface ImportMetaEnv {
     readonly VITE_API_BASE_URL: string;
@@ -21,8 +21,8 @@ declare module "*.vue" {
 declare global {
     interface Vue {
         /** 统一全局命名空间: hlw.$msg · hlw.$device · hlw.$http */
-        hlw: import("@hlw-uni/mp-core").HlwInstance;
+        hlw: import("@hlw-uni/mp-vue").HlwInstance;
         /** 兼容旧写法 */
-        $msg: import("@hlw-uni/mp-core").HlwMsg;
+        $msg: import("@hlw-uni/mp-vue").HlwMsg;
     }
 }

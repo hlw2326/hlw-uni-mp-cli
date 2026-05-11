@@ -2,7 +2,7 @@
  * 帮助中心接口
  * 控制器：Help (extends Base，无需登录)
  */
-import { http } from "@hlw-uni/mp-core";
+import { http } from "@hlw-uni/mp-vue";
 import { v1 } from "./config";
 
 /** 帮助分类 */

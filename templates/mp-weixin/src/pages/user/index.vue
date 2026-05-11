@@ -20,7 +20,6 @@
 
 <script setup lang="ts">
 import { onShow, onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app";
-import { hlw } from "@hlw-uni/mp-core";
 import { useThemePageStyle } from "@hlw-uni/mp-vue";
 import { useUser } from "@/core";
 

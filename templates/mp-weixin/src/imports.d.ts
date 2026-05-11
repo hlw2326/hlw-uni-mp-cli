@@ -6,8 +6,8 @@
 export {}
 declare global {
   const computed: typeof import('vue')['computed']
-  const hlw: typeof import('@hlw-uni/mp-core')['hlw']
-  const http: typeof import('@hlw-uni/mp-core')['http']
+  const hlw: typeof import('@hlw-uni/mp-vue')['hlw']
+  const http: typeof import('@hlw-uni/mp-vue')['http']
   const nextTick: typeof import('vue')['nextTick']
   const onError: typeof import('@dcloudio/uni-app')['onError']
   const onHide: typeof import('@dcloudio/uni-app')['onHide']
@@ -19,23 +19,22 @@ declare global {
   const onReachBottom: typeof import('@dcloudio/uni-app')['onReachBottom']
   const onReady: typeof import('@dcloudio/uni-app')['onReady']
   const onShareAppMessage: typeof import('@dcloudio/uni-app')['onShareAppMessage']
+  const onShareTimeline: typeof import('@dcloudio/uni-app')['onShareTimeline']
   const onShow: typeof import('@dcloudio/uni-app')['onShow']
   const onTabItemTap: typeof import('@dcloudio/uni-app')['onTabItemTap']
   const onUnload: typeof import('@dcloudio/uni-app')['onUnload']
   const onUnmounted: typeof import('vue')['onUnmounted']
   const reactive: typeof import('vue')['reactive']
   const ref: typeof import('vue')['ref']
-  const setupDefaultInterceptors: typeof import('@hlw-uni/mp-core')['setupDefaultInterceptors']
+  const setupInterceptors: typeof import('@hlw-uni/mp-vue')['setupInterceptors']
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
-  const useApp: typeof import('@hlw-uni/mp-core')['useApp']
-  const useDevice: typeof import('@hlw-uni/mp-core')['useDevice']
-  const useLoading: typeof import('@hlw-uni/mp-core')['useLoading']
-  const useMsg: typeof import('@hlw-uni/mp-core')['useMsg']
-  const usePageMeta: typeof import('@hlw-uni/mp-core')['usePageMeta']
-  const useRefs: typeof import('@hlw-uni/mp-core')['useRefs']
-  const useRequest: typeof import('@hlw-uni/mp-core')['useRequest']
-  const useUpload: typeof import('@hlw-uni/mp-core')['useUpload']
+  const useApp: typeof import('@hlw-uni/mp-vue')['useApp']
+  const useDevice: typeof import('@hlw-uni/mp-vue')['useDevice']
+  const useLoading: typeof import('@hlw-uni/mp-vue')['useLoading']
+  const useMsg: typeof import('@hlw-uni/mp-vue')['useMsg']
+  const usePageMeta: typeof import('@hlw-uni/mp-vue')['usePageMeta']
+  const useRefs: typeof import('@hlw-uni/mp-vue')['useRefs']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
 }
@@ -45,37 +44,17 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
-    readonly hlw: UnwrapRef<typeof import('@hlw-uni/mp-core')['hlw']>
-    readonly http: UnwrapRef<typeof import('@hlw-uni/mp-core')['http']>
-    readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
-    readonly onError: UnwrapRef<typeof import('@dcloudio/uni-app')['onError']>
+    readonly hlw: UnwrapRef<typeof import('@hlw-uni/mp-vue')['hlw']>
+    readonly http: UnwrapRef<typeof import('@hlw-uni/mp-vue')['http']>
     readonly onHide: UnwrapRef<typeof import('@dcloudio/uni-app')['onHide']>
     readonly onLaunch: UnwrapRef<typeof import('@dcloudio/uni-app')['onLaunch']>
-    readonly onLoad: UnwrapRef<typeof import('@dcloudio/uni-app')['onLoad']>
     readonly onMounted: UnwrapRef<typeof import('vue')['onMounted']>
-    readonly onPageScroll: UnwrapRef<typeof import('@dcloudio/uni-app')['onPageScroll']>
-    readonly onPullDownRefresh: UnwrapRef<typeof import('@dcloudio/uni-app')['onPullDownRefresh']>
-    readonly onReachBottom: UnwrapRef<typeof import('@dcloudio/uni-app')['onReachBottom']>
-    readonly onReady: UnwrapRef<typeof import('@dcloudio/uni-app')['onReady']>
     readonly onShareAppMessage: UnwrapRef<typeof import('@dcloudio/uni-app')['onShareAppMessage']>
+    readonly onShareTimeline: UnwrapRef<typeof import('@dcloudio/uni-app')['onShareTimeline']>
     readonly onShow: UnwrapRef<typeof import('@dcloudio/uni-app')['onShow']>
-    readonly onTabItemTap: UnwrapRef<typeof import('@dcloudio/uni-app')['onTabItemTap']>
-    readonly onUnload: UnwrapRef<typeof import('@dcloudio/uni-app')['onUnload']>
-    readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
-    readonly setupDefaultInterceptors: UnwrapRef<typeof import('@hlw-uni/mp-core')['setupDefaultInterceptors']>
-    readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
-    readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
-    readonly useApp: UnwrapRef<typeof import('@hlw-uni/mp-core')['useApp']>
-    readonly useDevice: UnwrapRef<typeof import('@hlw-uni/mp-core')['useDevice']>
-    readonly useLoading: UnwrapRef<typeof import('@hlw-uni/mp-core')['useLoading']>
-    readonly useMsg: UnwrapRef<typeof import('@hlw-uni/mp-core')['useMsg']>
-    readonly usePageMeta: UnwrapRef<typeof import('@hlw-uni/mp-core')['usePageMeta']>
-    readonly useRefs: UnwrapRef<typeof import('@hlw-uni/mp-core')['useRefs']>
-    readonly useRequest: UnwrapRef<typeof import('@hlw-uni/mp-core')['useRequest']>
-    readonly useUpload: UnwrapRef<typeof import('@hlw-uni/mp-core')['useUpload']>
+    readonly useMsg: UnwrapRef<typeof import('@hlw-uni/mp-vue')['useMsg']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
-    readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
   }
 }

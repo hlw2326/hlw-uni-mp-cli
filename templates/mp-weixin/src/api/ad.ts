@@ -2,7 +2,7 @@
  * 广告配置接口
  * 控制器：Ad (extends Base，无需登录)
  */
-import { http } from "@hlw-uni/mp-core";
+import { http } from "@hlw-uni/mp-vue";
 import { v1 } from "./config";
 
 /** 广告单元 */

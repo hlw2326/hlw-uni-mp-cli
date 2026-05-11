@@ -2,7 +2,7 @@
  * 用户相关接口
  * 控制器：User (extends Auth，需要登录)
  */
-import { http } from "@hlw-uni/mp-core";
+import { http } from "@hlw-uni/mp-vue";
 import { v1 } from "./config";
 
 /** 后端返回的完整用户实体类型 */

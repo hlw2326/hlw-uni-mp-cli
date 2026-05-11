@@ -2,7 +2,7 @@
  * 反馈建议接口
  * 控制器：Feedback (extends Auth，需要登录)
  */
-import { http } from "@hlw-uni/mp-core";
+import { http } from "@hlw-uni/mp-vue";
 import { v1 } from "./config";
 
 /** 反馈类型 */

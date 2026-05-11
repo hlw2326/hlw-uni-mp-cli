@@ -2,7 +2,7 @@
  * 登录相关接口
  * 控制器：Login (extends Base，无需登录)
  */
-import { http } from "@hlw-uni/mp-core";
+import { http } from "@hlw-uni/mp-vue";
 import type { UserInfo } from "./user";
 import { v1 } from "./config";
 
@@ -25,7 +25,7 @@ export interface LoginParams {
  * @param code wx.login 获取的 code
  * @param params 可选昵称/头像/邀请码
  */
-export function login(code: string, params: LoginParams = {}) {
+export function postLogin(code: string, params: LoginParams = {}) {
     return http.request<LoginResult>({
         url: v1("login/in"),
         method: "POST",
@@ -36,13 +36,13 @@ export function login(code: string, params: LoginParams = {}) {
 /**
  * 封装微信登录流程：wx.login → 调用后端
  */
-export function wxLogin(params: LoginParams = {}) {
+export function postWxLogin(params: LoginParams = {}) {
     return new Promise<LoginResult>((resolve, reject) => {
         uni.login({
             provider: "weixin",
             success: async (loginRes) => {
                 try {
-                    const res = await login(loginRes.code, params);
+                    const res = await postLogin(loginRes.code, params);
                     resolve(res.data);
                 } catch (e) {
                     reject(e);
