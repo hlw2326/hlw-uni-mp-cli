@@ -3,28 +3,28 @@ import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useUserStore } from "@/store";
 
 /**
- * 从启动参数里捕获邀请码，暂存到 user store，下次 wxLogin 时用掉。
+ * 从启动参数里捕获邀请码，暂存到 user store，下次 postWxLogin 时用掉。
  * 支持两种入口：
- *   1. 分享卡片：path 带 ?inviteCode=<uid>  → options.query.inviteCode
- *   2. 扫描小程序码（scene=<uid>）         → options.query.scene
+ *   1. 分享卡片：path 带 ?pid=<uid>       → options.query.pid
+ *   2. 扫描小程序码（scene=<uid>）              → options.query.scene
  */
-function captureInviteCode(options: { query?: Record<string, string> } | undefined) {
+function getPid(options: { query?: Record<string, string> } | undefined) {
     const query = options?.query || {};
-    const code = query.inviteCode || query.scene || "";
+    const code = query.pid || query.scene || "";
     if (!code) return;
     const store = useUserStore();
     // 已登录用户的邀请码忽略（避免老用户点分享链接被二次"认爹"）
     if (store.token) return;
-    store.inviteCode = code;
+    store.pid = code;
 }
 
 onLaunch((options: any) => {
     console.log("App Launch", options);
-    captureInviteCode(options);
+    getPid(options);
 });
 onShow((options: any) => {
     console.log("App Show", options);
-    captureInviteCode(options);
+    getPid(options);
 });
 onHide(() => {
     console.log("App Hide");

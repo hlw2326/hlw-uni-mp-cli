@@ -4,7 +4,7 @@
 const path = require('path');
 const fs   = require('fs');
 
-const ROOT = path.join(__dirname, '..', '..');
+const DEFAULT_ROOT = path.join(__dirname, '..', '..');
 
 /** 需要同步的本地包 */
 const LOCAL_PACKAGES = [
@@ -14,20 +14,45 @@ const LOCAL_PACKAGES = [
 ];
 
 /** 读取本地包的当前版本 */
-function getLocalVersion(pkgName) {
+function getLocalVersion(root, pkgName) {
     const dir  = pkgName.replace('@hlw-uni/', '');
-    const file = path.join(ROOT, dir, 'package.json');
+    const file = path.join(root, dir, 'package.json');
+
+    if (!fs.existsSync(file)) {
+        return null;
+    }
+
     const pkg  = JSON.parse(fs.readFileSync(file, 'utf8'));
     return pkg.version;
 }
 
+function getMissingReferencedPackages(root, pkg) {
+    return LOCAL_PACKAGES.filter((name) => {
+        const isReferenced = Boolean(pkg.dependencies?.[name] || pkg.devDependencies?.[name]);
+        return isReferenced && !getLocalVersion(root, name);
+    });
+}
+
 /** 更新单个模板的 package.json */
-function syncTemplate(templatePkgPath) {
+function syncTemplate(root, templatePkgPath) {
     const pkg = JSON.parse(fs.readFileSync(templatePkgPath, 'utf8'));
     let changed = false;
+    const missingPackages = getMissingReferencedPackages(root, pkg);
+
+    if (missingPackages.length > 0) {
+        console.warn(
+            `! Skipping ${path.relative(root, templatePkgPath)}: missing local packages ${missingPackages.join(', ')}`
+        );
+        return;
+    }
 
     for (const name of LOCAL_PACKAGES) {
-        const version = `^${getLocalVersion(name)}`;
+        const localVersion = getLocalVersion(root, name);
+        if (!localVersion) {
+            continue;
+        }
+
+        const version = `^${localVersion}`;
         if (pkg.dependencies?.[name] && pkg.dependencies[name] !== version) {
             console.log(`  ${name}: ${pkg.dependencies[name]} → ${version}`);
             pkg.dependencies[name] = version;
@@ -42,19 +67,29 @@ function syncTemplate(templatePkgPath) {
 
     if (changed) {
         fs.writeFileSync(templatePkgPath, JSON.stringify(pkg, null, 2) + '\n');
-        console.log(`✓ Updated ${path.relative(ROOT, templatePkgPath)}`);
+        console.log(`✓ Updated ${path.relative(root, templatePkgPath)}`);
     } else {
-        console.log(`✓ Already up to date: ${path.relative(ROOT, templatePkgPath)}`);
+        console.log(`✓ Already up to date: ${path.relative(root, templatePkgPath)}`);
     }
 }
 
-const templatesDir = path.join(__dirname, '..', 'templates');
-const templates = fs.readdirSync(templatesDir);
+function syncTemplates(root = DEFAULT_ROOT) {
+    const templatesDir = path.join(root, 'mp-cli', 'templates');
+    const templates = fs.readdirSync(templatesDir);
 
-console.log('Syncing template versions...');
-for (const tpl of templates) {
-    const pkgFile = path.join(templatesDir, tpl, 'package.json');
-    if (fs.existsSync(pkgFile)) {
-        syncTemplate(pkgFile);
+    console.log('Syncing template versions...');
+    for (const tpl of templates) {
+        const pkgFile = path.join(templatesDir, tpl, 'package.json');
+        if (fs.existsSync(pkgFile)) {
+            syncTemplate(root, pkgFile);
+        }
     }
 }
+
+if (require.main === module) {
+    syncTemplates();
+}
+
+module.exports = {
+    syncTemplates,
+};
