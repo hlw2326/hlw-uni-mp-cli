@@ -344,6 +344,7 @@ export default {
         'i-fa6-solid-medal',
         'i-fa6-solid-language',
         'i-fa6-solid-id-card',
+        'i-fa6-solid-tags',
         'i-fa6-solid-chalkboard-user',
         'i-fa6-solid-building',
         'i-fa6-solid-couch',
