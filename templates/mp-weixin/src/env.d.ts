@@ -20,9 +20,8 @@ declare module "*.vue" {
 
 declare global {
     interface Vue {
-        /** 统一全局命名空间: hlw.$msg · hlw.$device · hlw.$http */
+        /** 统一全局命名空间: hlw.$msg · hlw.$device · hlw.$request */
         hlw: import("@hlw-uni/mp-vue").HlwInstance;
-        /** 兼容旧写法 */
-        $msg: import("@hlw-uni/mp-vue").HlwMsg;
+        service: typeof import("@/service").service;
     }
 }

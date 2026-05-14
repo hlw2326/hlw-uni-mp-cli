@@ -12,7 +12,7 @@ export function createApp() {
     pinia.use(createUnistorage());
     app.use(pinia);
 
-    // 挂 hlw 到 globalProperties、注册 http 拦截器、无 token 时 wx.login
+    // 挂 hlw 到 globalProperties、注册 request 拦截器、无 token 时 wx.login
     bootstrap(app);
 
     return { app };

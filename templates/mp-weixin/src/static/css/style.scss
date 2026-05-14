@@ -17,6 +17,8 @@ button::after {
 page {
     font-family: 'Microsoft YaHei', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     -webkit-font-smoothing: antialiased;
+    background: var(--bg-page);
+    height: 100%;
 
     /* 主题色 — 默认值，运行时通过 page-meta :page-style 覆盖 */
     --primary-color: #3b82f6;
@@ -30,15 +32,17 @@ page {
     --radius-xl: 32rpx; /* 卡片外层 */
     --radius-full: 9999rpx; /* 胶囊 / 进度条 / Pill 标签 */
 
-    /* ===== 卡片标准尺寸（主卡统一规范） =====
+    /* ===== 页面 / 卡片标准尺寸（统一规范） =====
+     * 页面外层容器应用 --page-padding
      * 所有"典型卡片"都应用 --card-padding 和 --card-radius
      * 非对称 padding（如 hero 大卡、弹窗）按需单独覆盖
      */
+    --page-padding: 26rpx;
     --card-padding: 26rpx;
     --card-radius: 32rpx;
 
-    /* 外观语义变量 — 默认浅色，运行时通过 page-meta 注入 dark 覆盖 */
-    --bg-page: #f8fafc;
+    /* 外观语义变量 — 默认浅色，项目视觉变量由当前文件直接控制 */
+    --bg-page: #f8f8f8;
     --bg-elevated: #ffffff;
     --surface-card: #ffffff;
     --surface-card-muted: #f8fafc;
@@ -50,7 +54,7 @@ page {
     --text-subtle: #94a3b8;
     --text-disabled: #cbd5e1;
     --border-color: #e2e8f0;
-    --border-color-light: #f1f5f9;
+    --border-color-light: #ececec;
     --border-color-focus: #bfdbfe;
 
     /* ===== 字体大小 — 两套并存 =====

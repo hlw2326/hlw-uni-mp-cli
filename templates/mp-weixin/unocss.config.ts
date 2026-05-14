@@ -286,11 +286,8 @@ export default {
         'text-primary', 'text-success', 'text-warning', 'text-error',
         'bg-primary', 'bg-success', 'bg-warning', 'bg-error',
 
-        // ===== 后端 DB 动态返回的 iconify 类名 =====
         // UnoCSS 只扫描源码里字面量出现的 class 生成 CSS；
-        // 下面这些图标由后台管理员选择存在数据库里（user_menu/tools/course_platform/help_cate 等），
         // 源码里看不到但运行时会用到，必须显式 safelist。
-        // 新增图标时在这里追加字符串即可。
 
         // 后台分类 / 标签图标
         'i-fa6-solid-film',
@@ -371,7 +368,6 @@ export default {
         'i-fa6-solid-industry',
         'i-fa6-solid-recycle',
 
-        // user_menu 默认 6 项
         'i-fa6-solid-headset',
         'i-fa6-brands-weixin',
         'i-fa6-solid-user-plus',
@@ -379,30 +375,22 @@ export default {
         'i-fa6-solid-circle-question',
         'i-fa6-solid-gear',
 
-        // tools 默认工具
         'i-fa6-solid-droplet-slash',
         'i-fa6-solid-chart-line',
         'i-fa6-solid-trophy',
         'i-fa6-solid-toolbox',
 
-        // notice-popup 按类型切图标（type = system / activity / update）
         'i-fa6-solid-gift',
-
-        // card 兑换中心（兑换码 / 积分充值码）
         'i-fa6-solid-ticket',
         'i-fa6-solid-bolt',
-
-        // course_platform 默认平台
         'i-fa6-brands-tiktok',
         'i-fa6-brands-bilibili',
         'i-fa6-solid-video',
 
-        // help_cate 默认分类
         'i-fa6-solid-rocket',
         'i-fa6-solid-gem',
         'i-fa6-solid-shield-halved',
 
-        // help 文章常用图标
         'i-fa6-solid-hand',
         'i-fa6-solid-magnifying-glass',
         'i-fa6-solid-star',
@@ -428,7 +416,9 @@ export default {
         'i-fa6-solid-layer-group',
         'i-fa6-solid-gauge-high',
         'i-fa6-solid-wand-magic-sparkles',
-        'i-fa6-brands-weibo',
+        'i-ri-apps-2-fill',
+        'i-ri-apps-fill',
+        'i-ri-app-store-fill',
         'i-fa6-solid-circle-play',
         'i-fa6-solid-chevron-right',
         'i-fa6-solid-box-open',
