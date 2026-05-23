@@ -4,7 +4,9 @@ import {
     ServiceNamespace,
     useDevice,
     useRequest,
-    useUtils,
+    withQuery,
+    toQuery,
+    signText,
     type RequestConfig,
 } from "@hlw-uni/mp-vue";
 import { useUser } from "@/core";
@@ -36,7 +38,7 @@ export { BaseService, ServiceNamespace };
 globalThis.service = service;
 
 const request = useRequest();
-const { withQuery, toQuery, signText } = useUtils();
+// Utilities are now imported directly from @hlw-uni/mp-vue
 
 request.setBaseURL(import.meta.env.VITE_API_BASE_URL ?? "");
 
@@ -76,10 +78,6 @@ request.onResponse(async (res) => {
     if (res.code === 401) {
         useUser().login().catch(() => undefined);
         return res;
-    }
-
-    if (res.code !== 1) {
-        hlw.$msg.toast(res.info || "请求失败");
     }
 
     return res;

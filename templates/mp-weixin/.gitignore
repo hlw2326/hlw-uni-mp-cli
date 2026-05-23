@@ -12,5 +12,8 @@
 *.tmp
 *.bak
 *.swp
+private.*.key
+*.private.key
+*.pem
 Thumbs.db
 .DS_Store

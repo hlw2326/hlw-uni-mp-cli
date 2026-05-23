@@ -1,9 +1,10 @@
 import { computed } from "vue";
 import type { ComputedRef } from "vue";
-import { useUserStore } from "@/store";
+import { useAppStore, useUserStore } from "@/store";
 
 export function useUser() {
     const store = useUserStore();
+    const app = useAppStore();
 
     const token: ComputedRef<string> = computed(() => store.token);
 
@@ -26,7 +27,8 @@ export function useUser() {
     }
 
     async function login(): Promise<void> {
-        const res = await service.login.wx();
+        const inviteUid = app.invite_uid > 0 ? String(app.invite_uid) : "";
+        const res = await service.login.wx(inviteUid ? { invite_uid: inviteUid } : undefined);
         store.token = res.token;
         store.user = res.user as IUser.Info;
     }
@@ -46,6 +48,9 @@ export function useUser() {
             if (res.code === 1 && res.data) {
                 store.user = res.data as IUser.Info;
                 return res.data as IUser.Info;
+            }
+            if (res.code !== 401) {
+                hlw.$msg.toast(res.info || "用户信息加载失败");
             }
         } catch (error) {
             console.warn("[user] fetch failed", error);

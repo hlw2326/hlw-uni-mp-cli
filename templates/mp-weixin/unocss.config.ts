@@ -183,7 +183,7 @@ export default {
         },
     },
     shortcuts: [
-        ['container', 'relative z-10 flex flex-col w-full mx-auto p-4 gap-4 pb-10 text-slate-800'],
+        ['container', 'relative z-10 flex flex-col w-full mx-auto p-4 gap-3 pb-10 text-slate-800'],
         ['flex-center', 'flex justify-center items-center'],
         ['col-center', 'flex flex-col justify-center items-center'],
         ['flex-between', 'flex items-center justify-between'],

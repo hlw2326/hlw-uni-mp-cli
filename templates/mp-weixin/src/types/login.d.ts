@@ -6,5 +6,6 @@ declare namespace ILogin {
 
     interface Params {
         code: string;
+        invite_uid?: string;
     }
 }

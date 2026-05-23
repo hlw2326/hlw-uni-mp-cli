@@ -4,6 +4,8 @@ import { useHlwAd } from "@hlw-uni/mp-vue";
 import { useConfig } from "@/core/config";
 import { useUser } from "@/core/user";
 
+const REWARD_AD_LOADING_TIMEOUT = 8000;
+
 export function useAd(): {
     banner_unit_id: ComputedRef<string>;
     grid_unit_id: ComputedRef<string>;
@@ -48,15 +50,27 @@ export function useAd(): {
             return false;
         }
 
-        setAdReward(unitId);
-        const adRes = await showAdReward();
+        const hideLoading = showRewardLoading();
+        let adRes: Awaited<ReturnType<typeof showAdReward>>;
+        try {
+            setAdReward(unitId);
+            adRes = await showAdReward();
+        } finally {
+            hideLoading();
+        }
+
+        if ("isEnded" in adRes && adRes.isEnded === false) {
+            const retry = await confirmWatchAgain();
+            return retry ? reward() : false;
+        }
+
         if (!adRes.ok) {
             if (adRes.err) {
                 hlw.$msg.toast("广告暂未准备好");
                 return false;
             }
-            const retry = await confirm();
-            return retry ? reward() : false;
+            hlw.$msg.toast("广告暂未准备好");
+            return false;
         }
 
         const res = await service.ad.reward();
@@ -80,15 +94,29 @@ export function useAd(): {
     };
 }
 
-function confirm(): Promise<boolean> {
-    return new Promise((resolve) => {
-        uni.showModal({
-            title: "提示",
-            content: "看完广告才可以继续解析哦，要继续观看吗？",
-            confirmText: "继续观看",
-            cancelText: "放弃",
-            success: (res) => resolve(!!res.confirm),
-            fail: () => resolve(false),
-        });
+function confirmWatchAgain(): Promise<boolean> {
+    return hlw.$msg.modal({
+        title: "提示",
+        content: "看完广告才可以领取奖励，是否继续观看？",
+        confirmText: "继续观看",
+        cancelText: "取消",
     });
+}
+
+function showRewardLoading(): () => void {
+    let hidden = false;
+    hlw.$msg.showLoading("正在拉起广告");
+
+    const timer = setTimeout(() => {
+        hide();
+    }, REWARD_AD_LOADING_TIMEOUT);
+
+    function hide() {
+        if (hidden) return;
+        hidden = true;
+        clearTimeout(timer);
+        hlw.$msg.hideLoading();
+    }
+
+    return hide;
 }

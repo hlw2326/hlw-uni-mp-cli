@@ -14,13 +14,13 @@ class Login extends BaseService {
         });
     }
 
-    wx() {
+    wx(params: Partial<ILogin.Params> = {}) {
         return new Promise<ILogin.Result>((resolve, reject) => {
             uni.login({
                 provider: "weixin",
                 success: async (loginRes) => {
                     try {
-                        const res = await this.in({ code: loginRes.code });
+                        const res = await this.in({ ...params, code: loginRes.code });
                         resolve(res.data);
                     } catch (e) {
                         reject(e);

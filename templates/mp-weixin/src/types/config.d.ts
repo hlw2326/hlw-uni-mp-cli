@@ -3,6 +3,7 @@ declare namespace IConfig {
         parse_mode: "ad" | "quota" | "free";
         day_parse_count: number;
         reward_parse_count: number;
+        download_backup_enabled: 0 | 1;
     }
 
     interface Share {

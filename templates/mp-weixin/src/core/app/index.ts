@@ -1,10 +1,9 @@
 import { computed } from "vue";
 import type { ComputedRef } from "vue";
-import { useAppStore, useParseStore } from "@/store";
+import { useAppStore } from "@/store";
 
 export function useApp() {
     const store = useAppStore();
-    const parse = useParseStore();
 
     const clipboard: ComputedRef<boolean> = computed(() => store.clipboard);
 
@@ -12,20 +11,26 @@ export function useApp() {
         store.clipboard = value;
     }
 
-    function autoClipboard(): void {
-        if (!store.clipboard || parse.keyword) return;
+    function setInviteUid(value: unknown): void {
+        const uid = Number.parseInt(String(value || "0"), 10);
+        if (uid > 0) {
+            store.invite_uid = uid;
+        }
+    }
 
-        uni.getClipboardData({
-            success: (res) => {
-                const text = String(res.data || "").trim();
-                if (text) parse.keyword = text;
-            },
-        });
+    function applyLaunchOptions(options: any): void {
+        setInviteUid(options?.query?.invite_uid || options?.query?.uid);
+    }
+
+    function autoClipboard(): Promise<boolean> {
+        return Promise.resolve(false);
     }
 
     return {
         clipboard,
         setClipboard,
+        setInviteUid,
+        applyLaunchOptions,
         autoClipboard,
         store,
     };
